@@ -7,6 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		399DD77B22B88D570064775B /* BaseDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 399DD77A22B88D570064775B /* BaseDataLoader.swift */; };
+		399DD77D22B88D620064775B /* CacheManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 399DD77C22B88D620064775B /* CacheManager.swift */; };
+		399DD77F22B8907D0064775B /* AsyncDataLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 399DD77E22B8907D0064775B /* AsyncDataLoader.swift */; };
+		399DD78122B891020064775B /* DownloadCompletionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 399DD78022B891020064775B /* DownloadCompletionDelegate.swift */; };
+		399DD78322B8A5920064775B /* ImageLoader.swift in Sources */ = {isa = PBXBuildFile; fileRef = 399DD78222B8A5920064775B /* ImageLoader.swift */; };
+		399DD78522B8C6320064775B /* DataDownloadTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 399DD78422B8C6320064775B /* DataDownloadTask.swift */; };
+		399DD78722B8C7CF0064775B /* BaseDataTask.swift in Sources */ = {isa = PBXBuildFile; fileRef = 399DD78622B8C7CF0064775B /* BaseDataTask.swift */; };
 		39A6BA4822B7B2DB0046B053 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39A6BA4722B7B2DB0046B053 /* AppDelegate.swift */; };
 		39A6BA4A22B7B2DB0046B053 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39A6BA4922B7B2DB0046B053 /* ViewController.swift */; };
 		39A6BA4D22B7B2DB0046B053 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 39A6BA4B22B7B2DB0046B053 /* Main.storyboard */; };
@@ -34,6 +41,13 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		399DD77A22B88D570064775B /* BaseDataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseDataLoader.swift; sourceTree = "<group>"; };
+		399DD77C22B88D620064775B /* CacheManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CacheManager.swift; sourceTree = "<group>"; };
+		399DD77E22B8907D0064775B /* AsyncDataLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncDataLoader.swift; sourceTree = "<group>"; };
+		399DD78022B891020064775B /* DownloadCompletionDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloadCompletionDelegate.swift; sourceTree = "<group>"; };
+		399DD78222B8A5920064775B /* ImageLoader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ImageLoader.swift; sourceTree = "<group>"; };
+		399DD78422B8C6320064775B /* DataDownloadTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DataDownloadTask.swift; sourceTree = "<group>"; };
+		399DD78622B8C7CF0064775B /* BaseDataTask.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BaseDataTask.swift; sourceTree = "<group>"; };
 		39A6BA4422B7B2DB0046B053 /* AsyncDataLoader.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = AsyncDataLoader.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		39A6BA4722B7B2DB0046B053 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		39A6BA4922B7B2DB0046B053 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -103,6 +117,13 @@
 				39A6BA4E22B7B2DC0046B053 /* Assets.xcassets */,
 				39A6BA5022B7B2DC0046B053 /* LaunchScreen.storyboard */,
 				39A6BA5322B7B2DC0046B053 /* Info.plist */,
+				399DD77A22B88D570064775B /* BaseDataLoader.swift */,
+				399DD77C22B88D620064775B /* CacheManager.swift */,
+				399DD77E22B8907D0064775B /* AsyncDataLoader.swift */,
+				399DD78022B891020064775B /* DownloadCompletionDelegate.swift */,
+				399DD78222B8A5920064775B /* ImageLoader.swift */,
+				399DD78422B8C6320064775B /* DataDownloadTask.swift */,
+				399DD78622B8C7CF0064775B /* BaseDataTask.swift */,
 			);
 			path = AsyncDataLoader;
 			sourceTree = "<group>";
@@ -256,8 +277,15 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				399DD78522B8C6320064775B /* DataDownloadTask.swift in Sources */,
+				399DD78722B8C7CF0064775B /* BaseDataTask.swift in Sources */,
+				399DD78322B8A5920064775B /* ImageLoader.swift in Sources */,
+				399DD77D22B88D620064775B /* CacheManager.swift in Sources */,
+				399DD77F22B8907D0064775B /* AsyncDataLoader.swift in Sources */,
+				399DD78122B891020064775B /* DownloadCompletionDelegate.swift in Sources */,
 				39A6BA4A22B7B2DB0046B053 /* ViewController.swift in Sources */,
 				39A6BA4822B7B2DB0046B053 /* AppDelegate.swift in Sources */,
+				399DD77B22B88D570064775B /* BaseDataLoader.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
