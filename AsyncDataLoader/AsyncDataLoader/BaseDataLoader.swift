@@ -29,6 +29,7 @@ class BaseDataLoader: NSObject {
     
     
     private var downloadSession:URLSession?
+    private var downloadTaskArray:[DataDownloadTask] = []
     
     override init() {
         super.init()
@@ -39,8 +40,21 @@ class BaseDataLoader: NSObject {
                                           delegateQueue: queue)
     }
     
+    convenience init(WithDelegate delegate:Any) {
+        self.init()
+        self.downloadDelegate = delegate as? DownloadCompletionDelegate
+    }
 
-    func download(
+    //befor calling this method
+    // set delegation 'downloadDelegate:DownloadCompletionDelegate'
+    func download(FromPath urlPath:String){
+        
+    }
+    
+    func download(From path:String, progressHandler: ((Float) -> Void?),
+                  completionHandler: @escaping (Data, Bool, Error?)->Void){
+        
+    }
 
 }
 

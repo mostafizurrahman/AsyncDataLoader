@@ -8,7 +8,7 @@
 
 import UIKit
 
-protocol DownloadCompletionDelegate: NSObject {
+protocol DownloadCompletionDelegate: NSObjectProtocol {
     
     func onDownloadCompleted(WithData data:Data)
     func onDownload(Error error:Error)

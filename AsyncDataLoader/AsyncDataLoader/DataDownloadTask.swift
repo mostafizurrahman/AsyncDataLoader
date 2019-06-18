@@ -11,7 +11,7 @@ import UIKit
 
 class DataDownloadTask: BaseDataTask {
     
-    var completionHandler: ((Data, Bool, Error?) -> Void)?
+    var completionHandler: ((Data?, Bool, Error?) -> Void)?
     var progressHandler: ((Float) -> Void?)?
     
     private(set) var dataTask: URLSessionDataTask
