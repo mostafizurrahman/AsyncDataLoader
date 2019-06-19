@@ -35,11 +35,11 @@ class AsyncDataLoader: NSObject {
     
     override init() {
         super.init()
-        let queue = OperationQueue.main
+//        let queue = OperationQueue.main
         let configuration = URLSessionConfiguration.default
         self.downloadSession = URLSession(configuration: configuration,
                                           delegate: self,
-                                          delegateQueue: queue)
+                                          delegateQueue: nil)
     }
     
     convenience init(WithDelegate delegate:Any) {
@@ -53,9 +53,7 @@ class AsyncDataLoader: NSObject {
         
         guard let request = self.getRequest(From: urlPath) else {return}
         guard let task = self.downloadSession?.dataTask(with: request) else {
-            let error = DataError(title: "Download Fail",
-                                  description: "Unable to initiate download process.", code: 1001)
-            self.downloadDelegate?.onDownload(Error: error)
+            self.downloadDelegate?.onDownload(Error: getDownloadError())
             return
         }
         let downloadTask = DataDownloadTask(WithTask: task)
@@ -71,10 +69,24 @@ class AsyncDataLoader: NSObject {
                   cancelHandler:(()->Void?)?,
                   suspendHandler:(()->Void?)?,
                   completionHandler: @escaping (Data?, Error?)->Void){
-        guard self.getRequest(From: urlPath) != nil else {
+        guard let request = self.getRequest(From: urlPath) else {
             completionHandler(nil, getUrlError())
             return
         }
+        guard let task = self.downloadSession?.dataTask(with: request) else {
+            completionHandler(nil, getDownloadError())
+            return
+        }
+        let downloadTask = DataDownloadTask(WithTask: task)
+        downloadTask.completionHandler = completionHandler
+        downloadTask.cancelHandler = cancelHandler
+        downloadTask.suspendHandler = suspendHandler
+        downloadTask.progressHandler = progressHandler
+        self.downloadTaskArray.append(downloadTask)
+        downloadTask.resume()
+        
+        
+        
         //        let task = downloadSession?.dataTask(with: <#T##URLRequest#>)
     }
     
@@ -103,7 +115,7 @@ class AsyncDataLoader: NSObject {
         
         let request = URLRequest(url: dataUrl,
                                  cachePolicy: .reloadIgnoringLocalCacheData,
-                                 timeoutInterval: 10)
+                                 timeoutInterval: 60)
         return request
     }
     
@@ -126,6 +138,11 @@ class AsyncDataLoader: NSObject {
         return DataError(title: "Bad url",
                          description: "http url is in bad format.", code: 1000)
     }
+    
+    fileprivate func getDownloadError()->DataError{
+        return DataError(title: "Download Fail",
+                  description: "Unable to initiate download process.", code: 1001)
+    }
 }
 
 extension AsyncDataLoader:URLSessionDataDelegate {
@@ -140,7 +157,7 @@ extension AsyncDataLoader:URLSessionDataDelegate {
         
         print(response.mimeType) // check this value for image/json/or other file format
         task.dataSize = response.expectedContentLength
-        completionHandler(.allow)
+       
         DispatchQueue.main.async {
             if let delegate = self.downloadDelegate {
                 delegate.willBegin(WithSize: task.dataSize, type: .raw)
@@ -148,6 +165,7 @@ extension AsyncDataLoader:URLSessionDataDelegate {
                 begin(task.dataSize, .raw)
             }
         }
+         completionHandler(.allow)
     }
     
     func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {

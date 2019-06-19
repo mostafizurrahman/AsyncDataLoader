@@ -11,7 +11,7 @@ import UIKit
 protocol BaseDataTask{
     
         
-        var completionHandler:((Data?, Bool, Error?) -> Void)? { get set }
+        var completionHandler:((Data?, Error?) -> Void)? { get set }
         var progressHandler:((Float)->Void?)? {get set}
         
         func resume()

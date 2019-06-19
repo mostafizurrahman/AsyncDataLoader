@@ -9,7 +9,10 @@
 import UIKit
 
 class CacheManager: NSObject {
-    
-    
+    static let shared = CacheManager()
+    override init() {
+        super.init()
+        
+    }
 
 }
