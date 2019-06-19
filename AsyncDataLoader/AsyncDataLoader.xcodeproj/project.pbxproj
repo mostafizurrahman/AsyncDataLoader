@@ -21,6 +21,8 @@
 		39A6BA6822B7B2DD0046B053 /* AsyncDataLoaderUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 39A6BA6722B7B2DD0046B053 /* AsyncDataLoaderUITests.swift */; };
 		BE503F8A22BA6A4E003E35C8 /* SwiftyJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE503F8922BA6A4E003E35C8 /* SwiftyJSON.swift */; };
 		BE503F8C22BA6A83003E35C8 /* Images.json in Resources */ = {isa = PBXBuildFile; fileRef = BE503F8B22BA6A83003E35C8 /* Images.json */; };
+		BE503F8E22BABF4C003E35C8 /* AsyncBlockDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE503F8D22BABF4C003E35C8 /* AsyncBlockDownloader.swift */; };
+		BE503F9022BABFA4003E35C8 /* AsyncInterfaceDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE503F8F22BABFA4003E35C8 /* AsyncInterfaceDownloader.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +63,8 @@
 		39A6BA6922B7B2DD0046B053 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		BE503F8922BA6A4E003E35C8 /* SwiftyJSON.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SwiftyJSON.swift; sourceTree = "<group>"; };
 		BE503F8B22BA6A83003E35C8 /* Images.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Images.json; sourceTree = "<group>"; };
+		BE503F8D22BABF4C003E35C8 /* AsyncBlockDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncBlockDownloader.swift; sourceTree = "<group>"; };
+		BE503F8F22BABFA4003E35C8 /* AsyncInterfaceDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncInterfaceDownloader.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -119,11 +123,13 @@
 				39A6BA5022B7B2DC0046B053 /* LaunchScreen.storyboard */,
 				39A6BA5322B7B2DC0046B053 /* Info.plist */,
 				399DD77C22B88D620064775B /* CacheManager.swift */,
-				399DD77E22B8907D0064775B /* AsyncDataLoader.swift */,
 				399DD78422B8C6320064775B /* DataDownloadTask.swift */,
 				399DD78622B8C7CF0064775B /* BaseDataTask.swift */,
 				399DD78022B891020064775B /* DownloadCompletionDelegate.swift */,
 				BE503F8B22BA6A83003E35C8 /* Images.json */,
+				399DD77E22B8907D0064775B /* AsyncDataLoader.swift */,
+				BE503F8D22BABF4C003E35C8 /* AsyncBlockDownloader.swift */,
+				BE503F8F22BABFA4003E35C8 /* AsyncInterfaceDownloader.swift */,
 			);
 			path = AsyncDataLoader;
 			sourceTree = "<group>";
@@ -283,8 +289,10 @@
 				399DD77D22B88D620064775B /* CacheManager.swift in Sources */,
 				BE503F8A22BA6A4E003E35C8 /* SwiftyJSON.swift in Sources */,
 				399DD77F22B8907D0064775B /* AsyncDataLoader.swift in Sources */,
+				BE503F9022BABFA4003E35C8 /* AsyncInterfaceDownloader.swift in Sources */,
 				399DD78122B891020064775B /* DownloadCompletionDelegate.swift in Sources */,
 				39A6BA4A22B7B2DB0046B053 /* ViewController.swift in Sources */,
+				BE503F8E22BABF4C003E35C8 /* AsyncBlockDownloader.swift in Sources */,
 				39A6BA4822B7B2DB0046B053 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -12,7 +12,7 @@ class ViewController: UIViewController {
 
     
     
-    let downloader = AsyncDataLoader()
+    let downloader = AsyncBlockDownloader()
     @IBOutlet weak var percent4: UILabel!
     @IBOutlet weak var percent2: UILabel!
     @IBOutlet weak var percent3: UILabel!

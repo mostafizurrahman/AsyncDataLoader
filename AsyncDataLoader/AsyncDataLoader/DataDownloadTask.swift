@@ -72,3 +72,26 @@ class DataDownloadTask: BaseDataTask {
     var dataSize:Int64 = 0
     
 }
+
+
+extension String {
+    func getDataType()->DataType{
+        let value = self
+        if value.elementsEqual("jpeg/image") ||
+         value.elementsEqual("png/image") ||
+         value.elementsEqual("jpg/image")
+            ||  value.elementsEqual("gif/image") {
+            return .image
+        }
+        
+        if value.elementsEqual("text/json")  {
+            return .json
+        }
+        
+        if value.elementsEqual("text/xml")  {
+            return .xml
+        }
+        return .raw
+        
+    }
+}
