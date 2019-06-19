@@ -153,7 +153,7 @@ extension AsyncDataLoader:URLSessionDataDelegate {
             completionHandler(.cancel)
             return
         }
-        
+        print(response.expectedContentLength)
         print(response.mimeType) // check this value for image/json/or other file format
         task.dataSize = response.expectedContentLength
        

@@ -24,16 +24,17 @@ fileprivate class CacheData {
 class CacheManager: NSObject {
     var EXPIRE_SEC:Double = 120
     var MAX_OBJECT:Int = 10
-    var MAX_MEM_SIZE:Int = 600000
+    var MAX_MEM_SIZE:Int64 = 33210470
     var fillCount:Int64 = -1
     static let shared = CacheManager()
     var cacheKeys:[NSString] = []
     let memoryCache =  NSCache<NSString, AnyObject>()
     var cacheTimer:Timer?
+    var isCacheBusy = false
     override init() {
         super.init()
         self.memoryCache.evictsObjectsWithDiscardedContent = true
-        self.cacheTimer?.tolerance = 0.2
+        
     }
 
     func add(Data data:Data, forKey key:NSString, type:DataType){
@@ -52,6 +53,7 @@ class CacheManager: NSObject {
     }
     
     fileprivate func removeCache(){
+        self.isCacheBusy = true
         var minData = self.memoryCache.object(forKey: self.cacheKeys[0]) as! CacheData
         for key in self.cacheKeys {
             if let data = self.memoryCache.object(forKey: key) as? CacheData{
@@ -62,9 +64,11 @@ class CacheManager: NSObject {
         }
         self.memoryCache.removeObject(forKey: minData.URL_KEY)
         self.fillCount -= Int64(minData.data.count)
+        self.isCacheBusy = false
     }
     
     func removeCache(ForKey key:NSString)->Bool{
+        self.isCacheBusy = true
         if self.cacheKeys.contains(key){
             
             self.cacheKeys = self.cacheKeys.filter({ (_key) -> Bool in
@@ -77,8 +81,10 @@ class CacheManager: NSObject {
                 self.cacheTimer?.invalidate()
                 self.cacheTimer = nil
             }
+            self.isCacheBusy = false
             return true
         }
+        self.isCacheBusy = false
         return false
     }
     
@@ -94,25 +100,20 @@ class CacheManager: NSObject {
         self.cacheTimer = Timer.scheduledTimer(timeInterval: 2.0, target: self,
                                                selector: #selector(fireTimer),
                                                userInfo: nil, repeats: true)
-        
+        self.cacheTimer?.tolerance = 0.2
     }
     
     @objc func fireTimer() {
-//        var remove_keys = [NSString]()
-//        var indices = [Int]()
-        let _time =  Date().timeIntervalSince1970
-        for key in self.cacheKeys {
-            if let data = self.memoryCache.object(forKey: key) as? CacheData{
-                if self.EXPIRE_SEC + data.creationTime < _time {
-                    _ = self.removeCache(ForKey: key)
+        if !self.isCacheBusy {
+            let _time =  Date().timeIntervalSince1970
+            for key in self.cacheKeys {
+                if let data = self.memoryCache.object(forKey: key) as? CacheData{
+                    if self.EXPIRE_SEC + data.creationTime < _time {
+                        _ = self.removeCache(ForKey: key)
+                        break
+                    }
                 }
             }
         }
-//        var index = 0
-//        for key in remove_keys {
-//            self.cacheKeys.remove(at: indices[index])
-//            self.memoryCache.removeObject(forKey: key)
-//            index += 1
-//        }
     }
 }
