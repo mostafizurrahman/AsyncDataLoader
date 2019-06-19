@@ -9,10 +9,21 @@
 import UIKit
 
 
+enum DataType:Int{
+    case image = 0
+    case json = 1
+    case zip = 2
+    case xml = 3
+    case raw = 4
+}
+
 class DataDownloadTask: BaseDataTask {
     
     var completionHandler: ((Data?, Bool, Error?) -> Void)?
     var progressHandler: ((Float) -> Void?)?
+    var beginingHandler:((Int64) -> Void?)?
+    var dataType:DataType = .raw
+    weak var downloadDelegate:DownloadCompletionDelegate?
     
     private(set) var dataTask: URLSessionDataTask
     var dataFileLength:Int64 = 0
@@ -29,7 +40,7 @@ class DataDownloadTask: BaseDataTask {
     
     
     func resume() {
-        
+        self.dataTask.resume()
     }
     
     func suspend() {

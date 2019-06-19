@@ -14,6 +14,6 @@ protocol DownloadCompletionDelegate: NSObjectProtocol {
     func onDownload(Error error:Error)
     func onDownloadCancel()
     func onCompleted(Parcent percent:Float)
-    
-
+    func willBegin(WithSize size:Int64)
+    func didCompleted(Percentage percent:Float)
 }
