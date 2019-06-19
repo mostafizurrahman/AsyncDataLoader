@@ -50,7 +50,7 @@ class AsyncDataLoader: NSObject {
     //befor calling this method
     //set delegation 'downloadDelegate:DownloadCompletionDelegate'
     func download(FromPath urlPath:String){
-        
+        assert(self.downloadDelegate != nil, "`downloadDelegate:DownloadCompletionDelegate?` Must not be nil for downloading data without blocks.")
         guard let request = self.getRequest(From: urlPath) else {return}
         guard let task = self.downloadSession?.dataTask(with: request) else {
             self.downloadDelegate?.onDownload(Error: getDownloadError())
@@ -69,6 +69,7 @@ class AsyncDataLoader: NSObject {
                   cancelHandler:(()->Void?)?,
                   suspendHandler:(()->Void?)?,
                   completionHandler: @escaping (Data?, Error?)->Void){
+        
         guard let request = self.getRequest(From: urlPath) else {
             completionHandler(nil, getUrlError())
             return
@@ -84,8 +85,6 @@ class AsyncDataLoader: NSObject {
         downloadTask.progressHandler = progressHandler
         self.downloadTaskArray.append(downloadTask)
         downloadTask.resume()
-        
-        
         
         //        let task = downloadSession?.dataTask(with: <#T##URLRequest#>)
     }
@@ -165,7 +164,7 @@ extension AsyncDataLoader:URLSessionDataDelegate {
                 begin(task.dataSize, .raw)
             }
         }
-         completionHandler(.allow)
+        completionHandler(.allow)
     }
     
     func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
