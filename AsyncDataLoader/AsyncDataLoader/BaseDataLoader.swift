@@ -75,11 +75,42 @@ class BaseDataLoader: NSObject {
     
     //download using completion blocks
     func download(From path:String, progressHandler: ((Float) -> Void?),
-                  completionHandler: @escaping (Data, Bool, Error?)->Void){
+                  completionHandler: @escaping (Data, Error?)->Void){
         
 //        let task = downloadSession?.dataTask(with: <#T##URLRequest#>)
     }
-
+    
+    func cancelDownload(ForRemotePath remotePath:String)->Bool{
+        let (_,_index) = self.getTask(ForUrl: remotePath)
+        guard let index = _index else {return false}
+        let downloadTask = self.downloadTaskArray.remove(at: index)
+        downloadTask.cancel()
+        return true
+    }
+    
+    func resumeSuspendedDownload(ForPath urlPath:String)->Bool{
+        let (task,_) = self.getTask(ForUrl: urlPath)
+        if let downloadTask = task {            
+            downloadTask.resume()
+            return true
+        }
+        return false
+    }
+    
+    fileprivate func getTask(ForUrl urlPath:String) -> (DataDownloadTask?, Int?) {
+        
+        if let index = self.downloadTaskArray.firstIndex(where: { (downloadTask) -> Bool in
+            if let request = downloadTask.dataTask.originalRequest,
+                let urlPath = request.url?.path {
+                return urlPath.elementsEqual(urlPath)
+            }
+            return false
+        }) {
+            let downloadTask = self.downloadTaskArray[index]
+            return (downloadTask, index)
+        }
+        return (nil, nil)
+    }
 }
 
 extension BaseDataLoader:URLSessionDataDelegate {
@@ -92,18 +123,16 @@ extension BaseDataLoader:URLSessionDataDelegate {
             return
         }
         
+        print(response.mimeType) // check this value for image/json/or other file format
         task.dataSize = response.expectedContentLength
         completionHandler(.allow)
         DispatchQueue.main.async {
             if let delegate = self.downloadDelegate {
-                delegate.willBegin(WithSize: task.dataSize)
+                delegate.willBegin(WithSize: task.dataSize, type: .raw)
             } else if let begin = task.beginingHandler {
-                begin(task.dataSize)
+                begin(task.dataSize, .raw)
             }
         }
-        
-        
-        print(response.mimeType)
     }
     
     func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive data: Data) {
@@ -128,11 +157,11 @@ extension BaseDataLoader:URLSessionDataDelegate {
         }
         let task = downloadTaskArray.remove(at: index)
         DispatchQueue.main.async {
-//            if let e = error {
-//                task.completionHandler?(.failure(e))
-//            } else {
-//                task.completionHandler?(.success(task.buffer))
-//            }
+            if let delegate = self.downloadDelegate {
+                delegate.onDownloadCompleted(WithData: task.buffer, Error: error)
+            } else if let completionHandler = task.completionHandler {
+                completionHandler(task.buffer, error)
+            }
         }
     }
 }
