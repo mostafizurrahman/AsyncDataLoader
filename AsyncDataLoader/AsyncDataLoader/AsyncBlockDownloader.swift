@@ -92,9 +92,7 @@ class AsyncBlockDownloader: AsyncDataLoader {
         if let task = dataTask {
             self.cancel(task)
             self.clear(Task: task)
-            if task.completionHandlers.count == 0 {
-                task.cancel()
-            }
+            task.cancel()
         }
         return dataTask
     }

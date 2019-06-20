@@ -10,11 +10,6 @@ import UIKit
 
 class AsyncInterfaceDownloader: AsyncDataLoader {
 
-//    var downloadDelegates:[DownloadCompletionDelegate] = []
-//    convenience init(WithDelegate delegate:Any) {
-//        self.init()
-//        self.downloadDelegate = delegate as? DownloadCompletionDelegate
-//    }
     
     //befor calling this method
     //set delegation 'downloadDelegate:DownloadCompletionDelegate'
@@ -40,7 +35,6 @@ class AsyncInterfaceDownloader: AsyncDataLoader {
                 return nil
             }
             let downloadTask = DataDownloadTask(WithTask: task)
-//            self.downloadDelegates.append(delegate)
             downloadTask.downloadDelegates[downloadKey] = delegate
             self.downloadTaskArray.append(downloadTask)
             downloadTask.resume()
@@ -87,12 +81,16 @@ class AsyncInterfaceDownloader: AsyncDataLoader {
         if let task = dataTask {
             self.cancel(task)
             self.clear(Task: task)
+            task.cancel()
         }
         return dataTask
     }
     override internal func cancel(Task task:DataDownloadTask, Key key:String ) {
         self.cancel(task)
         task.downloadDelegates.removeValue(forKey: key)
+        if task.downloadDelegates.count == 0 {
+            task.cancel()
+        }
     }
     
     override internal func clear(Task dataTask: DataDownloadTask) {

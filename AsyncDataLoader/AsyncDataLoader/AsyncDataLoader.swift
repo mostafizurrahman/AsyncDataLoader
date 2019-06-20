@@ -16,7 +16,6 @@ class AsyncDataLoader: NSObject {
     
     override init() {
         super.init()
-//        let queue = OperationQueue.main
         let configuration = URLSessionConfiguration.default
         self.downloadSession = URLSession(configuration: configuration,
                                           delegate: self,
@@ -45,15 +44,6 @@ class AsyncDataLoader: NSObject {
             self.cancel(Task: task, Key: key)
         }
     }
-    
-//    func resumeSuspendedDownload(ForPath urlPath:String)->Bool{
-//        let (task,_) = self.getTask(ForUrl: urlPath)
-//        if let downloadTask = task {
-//            downloadTask.resume()
-//            return true
-//        }
-//        return false
-//    }
     
     func getRequest(From urlPath:String) -> URLRequest? {
         guard let dataUrl = URL(string: urlPath) else {

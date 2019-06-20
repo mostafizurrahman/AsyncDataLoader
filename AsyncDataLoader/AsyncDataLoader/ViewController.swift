@@ -13,6 +13,7 @@ class ViewController: UIViewController {
     
     
     let downloader = AsyncBlockDownloader()
+    let downloader1 = AsyncInterfaceDownloader()
     @IBOutlet weak var percent4: UILabel!
     @IBOutlet weak var percent2: UILabel!
     @IBOutlet weak var percent3: UILabel!
@@ -51,65 +52,73 @@ class ViewController: UIViewController {
         self.imageView3.image = nil
         self.imageView4.image = nil
         
-        downloader.download(From: url1, progressHandler: { (percent) -> Void? in
-            self.percent1.text = "completed \(percent)"
-        }, cancelHandler: { () -> Void? in
-            self.percent1.text = "canceled"
-        }, suspendHandler: { () -> Void? in
-            self.percent1.text = "suspended"
-        }) { (data,type, error) in
-            if let _data = data {
-                let image = UIImage(data: _data)
-                self.imageView1.image = image
-            } else if let _err = error as? DataError{
-                self.percent1.text = " \(_err.errorDescription)  \(_err.title)"
-            }
-        }
         
-        downloader.download(From: url2, progressHandler: { (percent) -> Void? in
-            self.percent2.text = "completed \(percent)"
-        }, cancelHandler: { () -> Void? in
-            self.percent2.text = "canceled"
-        }, suspendHandler: { () -> Void? in
-            self.percent2.text = "suspended"
-        }) { (data,type, error) in
-            if let _data = data {
-                let image = UIImage(data: _data)
-                self.imageView2.image = image
-            }else if let _err = error as? DataError{
-                self.percent2.text = " \(_err.errorDescription)  \(_err.title)"
-            }
-        }
-
-        downloader.download(From: url3, progressHandler: { (percent) -> Void? in
-            self.percent3.text = "completed \(percent)"
-        }, cancelHandler: { () -> Void? in
-            self.percent3.text = "canceled"
-        }, suspendHandler: { () -> Void? in
-            self.percent3.text = "suspended"
-        }) { (data,type, error) in
-            if let _data = data {
-                let image = UIImage(data: _data)
-                self.imageView3.image = image
-            } else if let _err = error as? DataError{
-                self.percent3.text = " \(_err.errorDescription)  \(_err.title)"
-            }
-        }
-
-        downloader.download(From: url4, progressHandler: { (percent) -> Void? in
-            self.percent4.text = "completed \(percent)"
-        }, cancelHandler: { () -> Void? in
-            self.percent4.text = "canceled"
-        }, suspendHandler: { () -> Void? in
-            self.percent4.text = "suspended"
-        }) { (data,type, error) in
-            if let _data = data {
-                let image = UIImage(data: _data)
-                self.imageView4.image = image
-            }else if let _err = error as? DataError{
-                self.percent4.text = " \(_err.errorDescription)  \(_err.title)"
-            }
-        }
+        let idf1 = self.downloader1.download(FromPath: url1, DelegateTo: self)
+        let idf2 = self.downloader1.download(FromPath: url2, DelegateTo: self)
+        let idf3 = self.downloader1.download(FromPath: url3, DelegateTo: self)
+        let idf4 = self.downloader1.download(FromPath: url4, DelegateTo: self)
+        
+        
+        
+//        downloader.download(From: url1, progressHandler: { (percent) -> Void? in
+//            self.percent1.text = "completed \(percent)"
+//        }, cancelHandler: { () -> Void? in
+//            self.percent1.text = "canceled"
+//        }, suspendHandler: { () -> Void? in
+//            self.percent1.text = "suspended"
+//        }) { (data,type, error) in
+//            if let _data = data {
+//                let image = UIImage(data: _data)
+//                self.imageView1.image = image
+//            } else if let _err = error as? DataError{
+//                self.percent1.text = " \(_err.errorDescription)  \(_err.title)"
+//            }
+//        }
+//
+//        downloader.download(From: url2, progressHandler: { (percent) -> Void? in
+//            self.percent2.text = "completed \(percent)"
+//        }, cancelHandler: { () -> Void? in
+//            self.percent2.text = "canceled"
+//        }, suspendHandler: { () -> Void? in
+//            self.percent2.text = "suspended"
+//        }) { (data,type, error) in
+//            if let _data = data {
+//                let image = UIImage(data: _data)
+//                self.imageView2.image = image
+//            }else if let _err = error as? DataError{
+//                self.percent2.text = " \(_err.errorDescription)  \(_err.title)"
+//            }
+//        }
+//
+//        downloader.download(From: url3, progressHandler: { (percent) -> Void? in
+//            self.percent3.text = "completed \(percent)"
+//        }, cancelHandler: { () -> Void? in
+//            self.percent3.text = "canceled"
+//        }, suspendHandler: { () -> Void? in
+//            self.percent3.text = "suspended"
+//        }) { (data,type, error) in
+//            if let _data = data {
+//                let image = UIImage(data: _data)
+//                self.imageView3.image = image
+//            } else if let _err = error as? DataError{
+//                self.percent3.text = " \(_err.errorDescription)  \(_err.title)"
+//            }
+//        }
+//
+//        downloader.download(From: url4, progressHandler: { (percent) -> Void? in
+//            self.percent4.text = "completed \(percent)"
+//        }, cancelHandler: { () -> Void? in
+//            self.percent4.text = "canceled"
+//        }, suspendHandler: { () -> Void? in
+//            self.percent4.text = "suspended"
+//        }) { (data,type, error) in
+//            if let _data = data {
+//                let image = UIImage(data: _data)
+//                self.imageView4.image = image
+//            }else if let _err = error as? DataError{
+//                self.percent4.text = " \(_err.errorDescription)  \(_err.title)"
+//            }
+//        }
         
 //        downloader.download(From: url1, progressHandler: { (percent) -> Void? in
 //            self.percent1.text = "completed \(percent)"
@@ -129,3 +138,30 @@ class ViewController: UIViewController {
     
 }
 
+extension ViewController : DownloadCompletionDelegate {
+    func onDownloadCompleted(WithData data: Data?, Type type: DataType?, Error error: Error?) {
+        
+    }
+    
+    func onDownloadCancel() {
+        
+    }
+    
+    func onDownloadSuspended() {
+        
+    }
+    
+    func onCompleted(Parcent percent: Float) {
+        
+    }
+    
+    func willBegin(WithSize size: Int64, type: DataType) {
+        
+    }
+    
+    func didCompleted(Percentage percent: Float) {
+        
+    }
+    
+    
+}
