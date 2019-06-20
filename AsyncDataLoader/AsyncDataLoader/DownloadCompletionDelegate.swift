@@ -10,12 +10,15 @@ import UIKit
 
 protocol DownloadCompletionDelegate: NSObjectProtocol {
     
-    func onDownloadCompleted(WithData data:Data?,Type type:DataType?, Error error:Error?)
-
-    
-    func onDownloadCancel()
-    func onDownloadSuspended()
-    func onCompleted(Parcent percent:Float)
-    func willBegin(WithSize size:Int64, type:DataType)
-    func didCompleted(Percentage percent:Float)
+    func didDownloadCompleted(ForID downloadID:String,
+                              Data data:Data?,
+                              Type type:DataType?,
+                              Error error:Error?)
+    func didDownloadCanceled(ForID downloadID:String)
+    func onCompleted(Parcentage percent:Float,
+                     ForID downloadID:String)
+    func willBeginDownload(WithSize size:Int64,
+                           Type type:DataType,
+                           ForID downloadID:String)
+    func didDownloadSuspended(ForID downloadID:String)
 }

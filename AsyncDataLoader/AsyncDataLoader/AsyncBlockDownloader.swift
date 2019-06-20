@@ -25,7 +25,6 @@ class AsyncBlockDownloader: AsyncDataLoader {
             let downloadKey = super.getID()
             for downloadTask in self.downloadTaskArray {
                 if downloadTask.dataTask.originalRequest?.url?.absoluteString.elementsEqual(urlPath) ?? false {
-//                    downloadTask.downloadDelegates.append(delegate)
                     downloadTask.completionHandlers[downloadKey] = completionHandler
                     downloadTask.cancelHandlers[downloadKey] = cancelHandler
                     downloadTask.suspendHandlers[downloadKey] = suspendHandler

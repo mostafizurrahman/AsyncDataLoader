@@ -15,23 +15,23 @@ class AsyncInterfaceDownloader: AsyncDataLoader {
     //set delegation 'downloadDelegate:DownloadCompletionDelegate'
     func download(FromPath urlPath:String, DelegateTo delegate: DownloadCompletionDelegate)->String?{
         
-//        assert(self.downloadDelegate != nil, "`downloadDelegate:DownloadCompletionDelegate?` Must not be nil for downloading data without blocks.")
-        assert(delegate.responds(to: Selector(("onDownloadCancel"))), "Delegate methods not implemented.")
+        
         let (_data, _type) = CacheManager.shared.getObject(ForKey: urlPath as NSString)
         if let data = _data, let type = _type {
-            delegate.onCompleted(Parcent: 1.0)
-            delegate.onDownloadCompleted(WithData: data, Type: type, Error: nil)
+            delegate.onCompleted(Parcentage: 1, ForID: "")
+            delegate.didDownloadCompleted(ForID: "", Data: _data, Type: type, Error: nil)
         } else {
             let downloadKey = super.getID()
             for downloadTask in self.downloadTaskArray {
-                if downloadTask.dataTask.originalRequest?.url?.path.elementsEqual(urlPath) ?? false {
+                if downloadTask.dataTask.originalRequest?.url?.absoluteString.elementsEqual(urlPath) ?? false {
                     downloadTask.downloadDelegates[downloadKey] = delegate
                     return downloadKey
                 }
             }
             guard let request = self.getRequest(From: urlPath) else {return nil}
             guard let task = self.downloadSession?.dataTask(with: request) else {
-                delegate.onDownloadCompleted(WithData: nil, Type: nil, Error: getDownloadError())
+                delegate.didDownloadCompleted(ForID: "", Data: nil, Type: nil, Error: self.getDownloadError())
+                
                 return nil
             }
             let downloadTask = DataDownloadTask(WithTask: task)
@@ -47,7 +47,9 @@ class AsyncInterfaceDownloader: AsyncDataLoader {
         DispatchQueue.main.async {
             for delegate in task.downloadDelegates {
                 if let downloadDelegate = delegate.value {
-                    downloadDelegate.willBegin(WithSize: task.dataSize, type: task.dataType)
+                    downloadDelegate.willBeginDownload(WithSize: task.dataSize,
+                                                       Type: task.dataType,
+                                                       ForID: delegate.key)
                 }
             }
         }
@@ -56,7 +58,7 @@ class AsyncInterfaceDownloader: AsyncDataLoader {
         DispatchQueue.main.async {
             for delegate in task.downloadDelegates {
                 if let downloadDelegate = delegate.value {
-                    downloadDelegate.onCompleted(Parcent: percent)
+                    downloadDelegate.onCompleted(Parcentage: percent, ForID: delegate.key)
                 }
             }
         }
@@ -66,9 +68,11 @@ class AsyncInterfaceDownloader: AsyncDataLoader {
         DispatchQueue.main.async {
             for delegate in task.downloadDelegates {
                 if let downloadDelegate = delegate.value {
-                    downloadDelegate.onDownloadCompleted(WithData: task.buffer,
-                                                         Type:task.dataType,
-                                                         Error: error)
+                    downloadDelegate.didDownloadCompleted(ForID: delegate.key,
+                                                          Data: task.buffer,
+                                                          Type: task.dataType,
+                                                          Error: error)
+                    
                 }
             }
             self.cacheData(Task: task)
@@ -100,7 +104,7 @@ class AsyncInterfaceDownloader: AsyncDataLoader {
     fileprivate func cancel(_ task:DataDownloadTask){
         for delegate in task.downloadDelegates {
             if let cancelDelegate = delegate.value {
-                cancelDelegate.onDownloadCancel()
+                cancelDelegate.didDownloadCanceled(ForID: delegate.key)
             }
         }
     }

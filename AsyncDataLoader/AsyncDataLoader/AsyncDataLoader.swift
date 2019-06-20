@@ -34,7 +34,7 @@ class AsyncDataLoader: NSObject {
         return dataTask
     }
     
-    func cancel(Task task:DataDownloadTask, Key key:String ) {
+    internal func cancel(Task task:DataDownloadTask, Key key:String ) {
    
     }
     

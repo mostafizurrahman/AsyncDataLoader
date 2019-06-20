@@ -22,6 +22,7 @@ class ViewController: UIViewController {
     @IBOutlet weak var imageView4: UIImageView!
     @IBOutlet weak var imageView2: UIImageView!
     @IBOutlet weak var imageView1: UIImageView!
+    var dictionary:[String : AnyObject] = [:]
     var jsonarray:[JSON] = []
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -33,6 +34,9 @@ class ViewController: UIViewController {
         // Do any additional setup after loading the view.
     }
 
+    var label:UILabel?
+    var imageView:UIImageView?
+    
     @IBAction func download(_ sender: Any) {
         
         guard let url1 = self.jsonarray[0]["urls"].dictionaryValue["full"]?.stringValue else {
@@ -53,11 +57,30 @@ class ViewController: UIViewController {
         self.imageView4.image = nil
         
         
-        let idf1 = self.downloader1.download(FromPath: url1, DelegateTo: self)
-        let idf2 = self.downloader1.download(FromPath: url2, DelegateTo: self)
-        let idf3 = self.downloader1.download(FromPath: url3, DelegateTo: self)
-        let idf4 = self.downloader1.download(FromPath: url4, DelegateTo: self)
+        imageView = self.imageView1
+        label = percent1
+        if let idf1 = self.downloader1.download(FromPath: url1, DelegateTo: self) {
+            self.dictionary[idf1] = [self.imageView1, self.percent1] as AnyObject
+        }
         
+        imageView = self.imageView2
+        label = percent2
+        
+        if let idf2 = self.downloader1.download(FromPath: url2, DelegateTo: self) {
+            self.dictionary[idf2] = [self.imageView2, self.percent2] as AnyObject
+        }
+        
+        imageView = self.imageView3
+        label = percent3
+        if let idf3 = self.downloader1.download(FromPath: url3, DelegateTo: self) {
+            self.dictionary[idf3] = [self.imageView3, self.percent3] as AnyObject
+        }
+        
+        imageView = self.imageView4
+        label = percent4
+        if let idf4 = self.downloader1.download(FromPath: url4, DelegateTo: self) {
+            self.dictionary[idf4] = [self.imageView4, self.percent4] as AnyObject
+        }
         
         
 //        downloader.download(From: url1, progressHandler: { (percent) -> Void? in
@@ -136,32 +159,78 @@ class ViewController: UIViewController {
 //        }
     }
     
+    var stop = false
+    @IBAction func start1(_ sender: Any) {
+        guard let url1 = self.jsonarray[0]["urls"].dictionaryValue["full"]?.stringValue else {
+            return
+        }
+        if stop {
+            if let idf = self.dictionary.keys.first {
+                self.downloader1.cancel(DownloadPath: url1, DownloadID: idf)
+            }
+        } else {
+            if let idf1 = self.downloader1.download(FromPath: url1, DelegateTo: self) {
+                self.dictionary[idf1] = [self.imageView1, self.percent1] as AnyObject
+            }
+            stop = true
+        }
+        
+    }
+    
+    @IBAction func start2(_ sender: Any) {
+        guard let url1 = self.jsonarray[0]["urls"].dictionaryValue["full"]?.stringValue else {
+            return
+        }
+        if let idf1 = self.downloader1.download(FromPath: url1, DelegateTo: self) {
+            self.dictionary[idf1] = [self.imageView2, self.percent2] as AnyObject
+        }
+    }
+    
+    
 }
 
 extension ViewController : DownloadCompletionDelegate {
-    func onDownloadCompleted(WithData data: Data?, Type type: DataType?, Error error: Error?) {
+    func didDownloadCompleted(ForID downloadID: String,
+                              Data data: Data?,
+                              Type type: DataType?,
+                              Error error: Error?) {
+        if let imageView = (self.dictionary[downloadID] as? [AnyObject])?.first as? UIImageView {
+            if let _data = data {
+                let image = UIImage(data: _data)
+                imageView.image = image
+            }
+        } else {
+            if let _data = data {
+                let image = UIImage(data: _data)
+                imageView?.image = image
+            }
+        }
+    }
+    
+    func didDownloadCanceled(ForID downloadID: String) {
+        self.percent1.text = "Canceled download"
+    }
+    
+    func onCompleted(Parcentage percent: Float,
+                     ForID downloadID: String) {
+        if let _percent = (self.dictionary[downloadID] as? [AnyObject])?.last as? UILabel {
+            _percent.text = "\(percent)"
+        } else {
+            self.label?.text = "\(percent)"
+        }
+    }
+    
+    func willBeginDownload(WithSize size: Int64,
+                           Type type: DataType,
+                           ForID downloadID: String) {
         
     }
     
-    func onDownloadCancel() {
+    func didDownloadSuspended(ForID downloadID: String) {
         
     }
     
-    func onDownloadSuspended() {
-        
-    }
     
-    func onCompleted(Parcent percent: Float) {
-        
-    }
-    
-    func willBegin(WithSize size: Int64, type: DataType) {
-        
-    }
-    
-    func didCompleted(Percentage percent: Float) {
-        
-    }
     
     
 }
