@@ -23,23 +23,37 @@ class AsyncDataLoader: NSObject {
                                           delegateQueue: nil)
     }
     
-    
-    func cancelDownload(ForRemotePath remotePath:String)->Bool{
-        let (_,_index) = self.getTask(ForUrl: remotePath)
-        guard let index = _index else {return false}
-        let downloadTask = self.downloadTaskArray.remove(at: index)
-        downloadTask.cancel()
-        return true
+    func getID()->String {
+        return UUID().uuidString
     }
     
-    func resumeSuspendedDownload(ForPath urlPath:String)->Bool{
-        let (task,_) = self.getTask(ForUrl: urlPath)
-        if let downloadTask = task {
-            downloadTask.resume()
-            return true
+    func cancelAllDownloads(ForUrl remotePath:String)->DataDownloadTask?{
+        let (dataTask,idx) = self.getTask(ForUrl: remotePath)
+        if let index=idx {
+            return self.downloadTaskArray.remove(at: index)
         }
-        return false
+        return dataTask
     }
+    
+    func cancel(Task task:DataDownloadTask, Key key:String ) {
+   
+    }
+    
+    func cancel(DownloadPath remotePath:String, DownloadID key:String){
+        let (dataTask,_) = self.getTask(ForUrl: remotePath)
+        if let task = dataTask {
+            self.cancel(Task: task, Key: key)
+        }
+    }
+    
+//    func resumeSuspendedDownload(ForPath urlPath:String)->Bool{
+//        let (task,_) = self.getTask(ForUrl: urlPath)
+//        if let downloadTask = task {
+//            downloadTask.resume()
+//            return true
+//        }
+//        return false
+//    }
     
     func getRequest(From urlPath:String) -> URLRequest? {
         guard let dataUrl = URL(string: urlPath) else {
@@ -52,7 +66,7 @@ class AsyncDataLoader: NSObject {
         return request
     }
     
-    func getTask(ForUrl urlPath:String) -> (DataDownloadTask?, Int?) {
+    fileprivate func getTask(ForUrl urlPath:String) -> (DataDownloadTask?, Int?) {
         
         if let index = self.downloadTaskArray.firstIndex(where: { (downloadTask) -> Bool in
             if let request = downloadTask.dataTask.originalRequest,
@@ -77,6 +91,9 @@ class AsyncDataLoader: NSObject {
                   description: "Unable to initiate download process.", code: 1001)
     }
     
+    func clear(Task dataTask:DataDownloadTask){
+        assertionFailure("must be overriden by child")
+    }
     
     func didResponsed(ForTask task:DataDownloadTask){
         assertionFailure("must be overriden by child")
@@ -100,6 +117,9 @@ class AsyncDataLoader: NSObject {
         
     }
     
+    fileprivate func getIndex(ForID id:String){
+        
+    }
 }
 
 extension AsyncDataLoader:URLSessionDataDelegate {
@@ -137,6 +157,8 @@ extension AsyncDataLoader:URLSessionDataDelegate {
         self.cacheData(Task: task)
         self.finished(Task: task, Error: error)
     }
+    
+    
 }
 
 

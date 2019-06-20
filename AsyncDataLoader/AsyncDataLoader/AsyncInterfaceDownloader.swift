@@ -10,7 +10,7 @@ import UIKit
 
 class AsyncInterfaceDownloader: AsyncDataLoader {
 
-    var downloadDelegates:[DownloadCompletionDelegate] = []
+//    var downloadDelegates:[DownloadCompletionDelegate] = []
 //    convenience init(WithDelegate delegate:Any) {
 //        self.init()
 //        self.downloadDelegate = delegate as? DownloadCompletionDelegate
@@ -18,7 +18,7 @@ class AsyncInterfaceDownloader: AsyncDataLoader {
     
     //befor calling this method
     //set delegation 'downloadDelegate:DownloadCompletionDelegate'
-    func download(FromPath urlPath:String, DelegateTo delegate: DownloadCompletionDelegate){
+    func download(FromPath urlPath:String, DelegateTo delegate: DownloadCompletionDelegate)->String?{
         
 //        assert(self.downloadDelegate != nil, "`downloadDelegate:DownloadCompletionDelegate?` Must not be nil for downloading data without blocks.")
         assert(delegate.responds(to: Selector(("onDownloadCancel"))), "Delegate methods not implemented.")
@@ -27,49 +27,83 @@ class AsyncInterfaceDownloader: AsyncDataLoader {
             delegate.onCompleted(Parcent: 1.0)
             delegate.onDownloadCompleted(WithData: data, Type: type, Error: nil)
         } else {
+            let downloadKey = super.getID()
             for downloadTask in self.downloadTaskArray {
                 if downloadTask.dataTask.originalRequest?.url?.path.elementsEqual(urlPath) ?? false {
-                    downloadTask.downloadDelegates.append(delegate)
-                    return
+                    downloadTask.downloadDelegates[downloadKey] = delegate
+                    return downloadKey
                 }
             }
-            guard let request = self.getRequest(From: urlPath) else {return}
+            guard let request = self.getRequest(From: urlPath) else {return nil}
             guard let task = self.downloadSession?.dataTask(with: request) else {
                 delegate.onDownloadCompleted(WithData: nil, Type: nil, Error: getDownloadError())
-                return
+                return nil
             }
             let downloadTask = DataDownloadTask(WithTask: task)
-            self.downloadDelegates.append(delegate)
-            downloadTask.downloadDelegates.append(delegate)
+//            self.downloadDelegates.append(delegate)
+            downloadTask.downloadDelegates[downloadKey] = delegate
             self.downloadTaskArray.append(downloadTask)
             downloadTask.resume()
+            return downloadKey
         }
-        
+        return nil
     }
     
-    override func didResponsed(ForTask task:DataDownloadTask) {
+    override internal func didResponsed(ForTask task:DataDownloadTask) {
         DispatchQueue.main.async {
             for delegate in task.downloadDelegates {
-                delegate?.willBegin(WithSize: task.dataSize, type: task.dataType)
+                if let downloadDelegate = delegate.value {
+                    downloadDelegate.willBegin(WithSize: task.dataSize, type: task.dataType)
+                }
             }
         }
     }
-    override func completing(Percent percent:Float, ofTask task:DataDownloadTask){
+    override internal func completing(Percent percent:Float, ofTask task:DataDownloadTask){
         DispatchQueue.main.async {
             for delegate in task.downloadDelegates {
-                delegate?.onCompleted(Parcent: percent)
+                if let downloadDelegate = delegate.value {
+                    downloadDelegate.onCompleted(Parcent: percent)
+                }
             }
         }
     }
     
-    override func finished(Task task:DataDownloadTask, Error error:Error?){
+    override internal func finished(Task task:DataDownloadTask, Error error:Error?){
         DispatchQueue.main.async {
             for delegate in task.downloadDelegates {
-                delegate?.onDownloadCompleted(WithData: task.buffer,
-                                              Type:task.dataType,
-                                              Error: error)
+                if let downloadDelegate = delegate.value {
+                    downloadDelegate.onDownloadCompleted(WithData: task.buffer,
+                                                         Type:task.dataType,
+                                                         Error: error)
+                }
             }
+            self.cacheData(Task: task)
             task.downloadDelegates.removeAll()
+        }
+    }
+    
+    override func cancelAllDownloads(ForUrl remotePath:String)->DataDownloadTask? {
+        let dataTask = super.cancelAllDownloads(ForUrl: remotePath)
+        if let task = dataTask {
+            self.cancel(task)
+            self.clear(Task: task)
+        }
+        return dataTask
+    }
+    override internal func cancel(Task task:DataDownloadTask, Key key:String ) {
+        self.cancel(task)
+        task.downloadDelegates.removeValue(forKey: key)
+    }
+    
+    override internal func clear(Task dataTask: DataDownloadTask) {
+        dataTask.downloadDelegates.removeAll()
+    }
+    
+    fileprivate func cancel(_ task:DataDownloadTask){
+        for delegate in task.downloadDelegates {
+            if let cancelDelegate = delegate.value {
+                cancelDelegate.onDownloadCancel()
+            }
         }
     }
 }
