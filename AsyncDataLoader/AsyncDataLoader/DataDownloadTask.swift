@@ -25,11 +25,9 @@ class DataDownloadTask: BaseDataTask {
     var suspendHandlers:[String : (()->Void?)?] = [:]
     var beginingHandlers:[String : ((Int64,DataType) -> Void?)?] = [:]
     var dataType:DataType = .raw
-    
     var downloadDelegates:[String : DownloadCompletionDelegate?] = [:]
-    
+    var dataSize:Int64 = 0
     private(set) var dataTask: URLSessionDataTask
-    var dataFileLength:Int64 = 0
     var buffer:Data = Data()
     
     
@@ -55,10 +53,6 @@ class DataDownloadTask: BaseDataTask {
         self.dataTask.cancel()
 
     }
-    
-
-    var dataSize:Int64 = 0
-    
 }
 
 

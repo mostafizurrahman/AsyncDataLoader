@@ -54,7 +54,7 @@ class AsyncBlockDownloader: AsyncDataLoader {
         return nil
     }
     
-    override func didResponsed(ForTask task:DataDownloadTask){
+    override internal func didResponsed(ForTask task:DataDownloadTask){
         DispatchQueue.main.async {
             for begin in task.beginingHandlers {
                 if let beginHanderl = begin.value {
@@ -64,7 +64,7 @@ class AsyncBlockDownloader: AsyncDataLoader {
         }
     }
     
-    override func completing(Percent percent:Float, ofTask task:DataDownloadTask)  {
+    override internal func completing(Percent percent:Float, ofTask task:DataDownloadTask)  {
         DispatchQueue.main.async {
             for progress in task.progressHandlers {
                 if let progressHandler = progress.value {
@@ -74,7 +74,7 @@ class AsyncBlockDownloader: AsyncDataLoader {
         }
     }
     
-    override func finished(Task task:DataDownloadTask, Error error:Error?){
+    override internal func finished(Task task:DataDownloadTask, Error error:Error?){
         DispatchQueue.main.async {
             for completion in task.completionHandlers {
                 if let completionHandler = completion.value {
