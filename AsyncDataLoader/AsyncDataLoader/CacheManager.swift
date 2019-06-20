@@ -38,18 +38,21 @@ class CacheManager: NSObject {
     }
 
     func add(Data data:Data, forKey key:NSString, type:DataType){
-        let len = Int64(data.count)
-        self.fillCount += len
-        if self.fillCount > self.MAX_MEM_SIZE {
-            self.removeCache()
+        if !self.cacheKeys.contains(where: { (_key) -> Bool in
+            return key.isEqual(to: _key as String)
+        }) {
+            let len = Int64(data.count)
+            self.fillCount += len
+            if self.fillCount > self.MAX_MEM_SIZE {
+                self.removeCache()
+            }
+            self.cacheKeys.append(key)
+            let cachedObject = CacheData(Data: data, key:key, type: type)
+            self.memoryCache.setObject(cachedObject as AnyObject, forKey: key)
+            if self.cacheTimer == nil {
+                self.startTimer()
+            }
         }
-        self.cacheKeys.append(key)
-        let cachedObject = CacheData(Data: data, key:key, type: type)
-        self.memoryCache.setObject(cachedObject as AnyObject, forKey: key)
-        if self.cacheTimer == nil {
-            self.startTimer()
-        }
-        
     }
     
     fileprivate func removeCache(){
@@ -88,11 +91,14 @@ class CacheManager: NSObject {
         return false
     }
     
-    func getObject(ForKey key:NSString)->(Data,DataType){
-        let obj = self.memoryCache.object(forKey: key) as! CacheData
-        obj.creationTime = Date().timeIntervalSince1970
-        self.memoryCache.setObject(obj, forKey: key)
-        return (obj.data, obj.dataType)
+    func getObject(ForKey key:NSString)->(Data?,DataType?){
+        if self.cacheKeys.contains(key){
+            let obj = self.memoryCache.object(forKey: key) as! CacheData
+            obj.creationTime = Date().timeIntervalSince1970
+            self.memoryCache.setObject(obj, forKey: key)
+            return (obj.data, obj.dataType)
+        }
+        return (nil, nil)
     }
     
     
@@ -101,6 +107,7 @@ class CacheManager: NSObject {
                                                selector: #selector(fireTimer),
                                                userInfo: nil, repeats: true)
         self.cacheTimer?.tolerance = 0.2
+        
     }
     
     @objc func fireTimer() {

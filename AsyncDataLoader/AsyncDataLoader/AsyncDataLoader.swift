@@ -24,12 +24,6 @@ class AsyncDataLoader: NSObject {
     }
     
     
-    
-    
-    
-    
-    
-    
     func cancelDownload(ForRemotePath remotePath:String)->Bool{
         let (_,_index) = self.getTask(ForUrl: remotePath)
         guard let index = _index else {return false}
@@ -95,6 +89,17 @@ class AsyncDataLoader: NSObject {
     func finished(Task data:DataDownloadTask, Error error:Error?){
         assertionFailure("must be overriden by child")
     }
+    
+    func cacheData(Task task:DataDownloadTask){
+        guard let _path = task.dataTask.originalRequest?.url?.absoluteString else {
+            return
+        }
+        CacheManager.shared.add(Data: task.buffer,
+                                forKey: _path as NSString,
+                                type: task.dataType)
+        
+    }
+    
 }
 
 extension AsyncDataLoader:URLSessionDataDelegate {
@@ -129,6 +134,7 @@ extension AsyncDataLoader:URLSessionDataDelegate {
             return
         }
         let task = downloadTaskArray.remove(at: index)
+        self.cacheData(Task: task)
         self.finished(Task: task, Error: error)
     }
 }

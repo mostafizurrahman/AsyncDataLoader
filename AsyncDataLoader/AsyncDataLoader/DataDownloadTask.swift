@@ -19,14 +19,14 @@ enum DataType:Int{
 
 class DataDownloadTask: BaseDataTask {
     
-    var completionHandler: ((Data?, Error?) -> Void)?
-    var progressHandler: ((Float) -> Void?)?
-    var cancelHandler:(()->Void?)?
-    var suspendHandler:(()->Void?)?
-    var beginingHandler:((Int64,DataType) -> Void?)?
+    var completionHandlers: [((Data?,DataType?, Error?) -> Void)?] = []
+    var progressHandlers: [((Float) -> Void?)?] = []
+    var cancelHandlers:[(()->Void?)?] = []
+    var suspendHandlers:[(()->Void?)?] = []
+    var beginingHandlers:[((Int64,DataType) -> Void?)?] = []
     var dataType:DataType = .raw
     
-    weak var downloadDelegate:DownloadCompletionDelegate?
+    var downloadDelegates:[DownloadCompletionDelegate?] = []
     
     private(set) var dataTask: URLSessionDataTask
     var dataFileLength:Int64 = 0
@@ -49,22 +49,22 @@ class DataDownloadTask: BaseDataTask {
     func suspend() {
         self.dataTask.suspend()
         DispatchQueue.main.async {
-            if let delegate = self.downloadDelegate {
-                delegate.onDownloadSuspended()
-            } else if let suspend_handler = self.suspendHandler {
-                suspend_handler()
-            }
+//            if let delegate = self.downloadDelegate {
+//                delegate.onDownloadSuspended()
+//            } else if let suspend_handler = self.suspendHandler {
+//                suspend_handler()
+//            }
         }
     }
     
     func cancel() {
         self.dataTask.cancel()
         DispatchQueue.main.async {
-            if let delegate = self.downloadDelegate {
-                delegate.onDownloadCancel()
-            } else if let cancel_handler = self.cancelHandler {
-                cancel_handler()
-            }
+//            if let delegate = self.downloadDelegate {
+//                delegate.onDownloadCancel()
+//            } else if let cancel_handler = self.cancelHandler {
+//                cancel_handler()
+//            }
         }
     }
     

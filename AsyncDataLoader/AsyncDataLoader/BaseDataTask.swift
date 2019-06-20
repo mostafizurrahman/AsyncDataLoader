@@ -12,11 +12,11 @@ protocol BaseDataTask{
     
     
     
-    var completionHandler: ((Data?, Error?) -> Void)?{ get set }
-    var progressHandler: ((Float) -> Void?)?{ get set }
-    var cancelHandler:(()->Void?)?{ get set }
-    var suspendHandler:(()->Void?)?{ get set }
-    var beginingHandler:((Int64,DataType) -> Void?)?{ get set }
+    var completionHandlers: [((Data?, DataType?, Error?) -> Void)?]{ get set }
+    var progressHandlers:[ ((Float) -> Void?)?]{ get set }
+    var cancelHandlers:[(()->Void?)?]{ get set }
+    var suspendHandlers:[(()->Void?)?]{ get set }
+    var beginingHandlers:[((Int64,DataType) -> Void?)?]{ get set }
         func resume()
         func suspend()
         func cancel()
