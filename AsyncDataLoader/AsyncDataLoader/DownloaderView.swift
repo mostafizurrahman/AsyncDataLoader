@@ -11,6 +11,7 @@ import UIKit
 class DownloaderView: UIView {
 
     var downloadIdentifier:String?
+    var remoteUrl:String?
     @IBOutlet weak var urlLabel: UILabel!
     @IBOutlet weak var percentIndicator: UILabel!
     @IBOutlet weak var progressView: UIProgressView!

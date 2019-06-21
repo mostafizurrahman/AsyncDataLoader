@@ -23,13 +23,14 @@ class AsyncBlockDownloader: AsyncDataLoader {
             completionHandler(data,type, nil)
         } else {
             let downloadKey = super.getID()
+            print(downloadKey)
             for downloadTask in self.downloadTaskArray {
                 if downloadTask.dataTask.originalRequest?.url?.absoluteString.elementsEqual(urlPath) ?? false {
                     downloadTask.completionHandlers[downloadKey] = completionHandler
                     downloadTask.cancelHandlers[downloadKey] = cancelHandler
-//                    downloadTask.suspendHandlers[downloadKey] = suspendHandler
                     downloadTask.progressHandlers[downloadKey] = progressHandler
                     identifier(downloadKey)
+                    return
                 }
             }
             
@@ -104,14 +105,16 @@ class AsyncBlockDownloader: AsyncDataLoader {
     
     override internal func cancel(Task task:DataDownloadTask, Key key:String ) {
         
-        self.cancel(task)
         task.beginingHandlers.removeValue(forKey: key)
         task.progressHandlers.removeValue(forKey: key)
         task.completionHandlers.removeValue(forKey: key)
-        task.cancelHandlers.removeValue(forKey: key)
+        if let cancelBlock = task.cancelHandlers.removeValue(forKey: key) {
+            cancelBlock?()
+        }
         if task.completionHandlers.count == 0 {
             task.cancel()
         }
+        print(task.progressHandlers.count)
     }
     
     override internal func clear(Task dataTask: DataDownloadTask) {

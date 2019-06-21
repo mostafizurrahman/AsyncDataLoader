@@ -55,14 +55,14 @@ class CircularProgress: UIView {
         tracklayer.path = circlePath.cgPath
         tracklayer.fillColor = UIColor.clear.cgColor
         tracklayer.strokeColor = trackColor.cgColor
-        tracklayer.lineWidth = 10.0;
+        tracklayer.lineWidth = 10
         tracklayer.strokeEnd = 1.0
         layer.addSublayer(tracklayer)
         
         progressLayer.path = circlePath.cgPath
         progressLayer.fillColor = UIColor.clear.cgColor
         progressLayer.strokeColor = progressColor.cgColor
-        progressLayer.lineWidth = 10.0;
+        progressLayer.lineWidth = 10
         progressLayer.strokeEnd = 0.0
         layer.addSublayer(progressLayer)
         
@@ -70,14 +70,6 @@ class CircularProgress: UIView {
     
     func setProgressWithAnimation(duration: TimeInterval, value: Float) {
         progressLayer.strokeEnd = CGFloat(value)
-//        let animation = CABasicAnimation(keyPath: "strokeEnd")
-//        animation.duration = duration
-//        // Animate from 0 (no circle) to 1 (full circle)
-//        animation.fromValue = 0
-//        animation.toValue = value
-//        animation.timingFunction = CAMediaTimingFunction(name: CAMediaTimingFunctionName.linear)
-//        progressLayer.strokeEnd = CGFloat(value)
-//        progressLayer.add(animation, forKey: "animateCircle")
     }
 
 

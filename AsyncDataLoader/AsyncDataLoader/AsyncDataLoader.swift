@@ -20,6 +20,7 @@ class AsyncDataLoader: NSObject {
         self.downloadSession = URLSession(configuration: configuration,
                                           delegate: self,
                                           delegateQueue: nil)
+        
     }
     
     func getID()->String {
@@ -31,7 +32,7 @@ class AsyncDataLoader: NSObject {
         if let index=idx {
             return self.downloadTaskArray.remove(at: index)
         }
-        dataTask?.forcedCacel = true
+        dataTask?.forcedCacel = dataTask?.completionHandlers.count == 1
         return dataTask
     }
     
@@ -42,7 +43,7 @@ class AsyncDataLoader: NSObject {
     func cancel(DownloadPath remotePath:String, DownloadID key:String){
         let (dataTask,_) = self.getTask(ForUrl: remotePath)
         if let task = dataTask {
-            task.forcedCacel = true
+            task.forcedCacel = task.completionHandlers.count == 1
             self.cancel(Task: task, Key: key)
         }
     }
