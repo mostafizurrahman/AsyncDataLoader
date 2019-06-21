@@ -9,12 +9,13 @@
 import UIKit
 
 
-enum DataType:Int{
-    case image = 0
-    case json = 1
-    case zip = 2
-    case xml = 3
-    case raw = 4
+enum DataType:String{
+    case image = "IMAGE"
+    case json = "JSON"
+    case zip = "ZIP"
+    case xml = "XML"
+    case plain = "PLAIN TEXT"
+    case raw = "RAW"
 }
 
 class DataDownloadTask: BaseDataTask {
@@ -59,15 +60,20 @@ class DataDownloadTask: BaseDataTask {
 extension String {
     func getDataType()->DataType{
         let value = self
-        if value.elementsEqual("jpeg/image") ||
-         value.elementsEqual("png/image") ||
-         value.elementsEqual("jpg/image")
-            ||  value.elementsEqual("gif/image") {
+        if value.elementsEqual("image/jpeg") ||
+         value.elementsEqual("image/png") ||
+         value.elementsEqual("image/jpg")
+            ||  value.elementsEqual("image/gif") {
             return .image
         }
         
-        if value.elementsEqual("text/json")  {
+        if value.elementsEqual("text/json") ||
+            value.elementsEqual("application/json"){
             return .json
+        }
+        
+        if value.elementsEqual("text/plain") {
+            return .plain
         }
         
         if value.elementsEqual("text/xml")  {

@@ -26,6 +26,7 @@
 		BEFB6A0522BCD4D900FC6504 /* BlockViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFB6A0422BCD4D900FC6504 /* BlockViewController.swift */; };
 		BEFB6A0722BCDBA700FC6504 /* CircularProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFB6A0622BCDBA700FC6504 /* CircularProgress.swift */; };
 		BEFB6A0922BCDCEF00FC6504 /* DownloaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFB6A0822BCDCEF00FC6504 /* DownloaderView.swift */; };
+		BEFB6A0B22BD487E00FC6504 /* UniversalDownloadViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFB6A0A22BD487E00FC6504 /* UniversalDownloadViewController.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -71,6 +72,7 @@
 		BEFB6A0422BCD4D900FC6504 /* BlockViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockViewController.swift; sourceTree = "<group>"; };
 		BEFB6A0622BCDBA700FC6504 /* CircularProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgress.swift; sourceTree = "<group>"; };
 		BEFB6A0822BCDCEF00FC6504 /* DownloaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloaderView.swift; sourceTree = "<group>"; };
+		BEFB6A0A22BD487E00FC6504 /* UniversalDownloadViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UniversalDownloadViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,24 +123,16 @@
 		39A6BA4622B7B2DB0046B053 /* AsyncDataLoader */ = {
 			isa = PBXGroup;
 			children = (
-				BE503F8922BA6A4E003E35C8 /* SwiftyJSON.swift */,
+				BEFB6A0C22BD5DEA00FC6504 /* CacheManager */,
+				BEFB6A1022BD5E3A00FC6504 /* DownloadManager */,
+				BEFB6A0D22BD5DF800FC6504 /* JSON_Parser */,
+				BEFB6A1122BD5E6F00FC6504 /* CustomControls */,
+				BEFB6A0F22BD5E2000FC6504 /* Resources */,
+				BEFB6A0E22BD5E0900FC6504 /* ViewControllers */,
 				39A6BA4722B7B2DB0046B053 /* AppDelegate.swift */,
-				39A6BA4922B7B2DB0046B053 /* ViewController.swift */,
 				39A6BA4B22B7B2DB0046B053 /* Main.storyboard */,
-				39A6BA4E22B7B2DC0046B053 /* Assets.xcassets */,
 				39A6BA5022B7B2DC0046B053 /* LaunchScreen.storyboard */,
 				39A6BA5322B7B2DC0046B053 /* Info.plist */,
-				399DD77C22B88D620064775B /* CacheManager.swift */,
-				399DD78622B8C7CF0064775B /* BaseDataTask.swift */,
-				399DD78422B8C6320064775B /* DataDownloadTask.swift */,
-				399DD78022B891020064775B /* DownloadCompletionDelegate.swift */,
-				BE503F8B22BA6A83003E35C8 /* Images.json */,
-				399DD77E22B8907D0064775B /* AsyncDataLoader.swift */,
-				BE503F8D22BABF4C003E35C8 /* AsyncBlockDownloader.swift */,
-				BE503F8F22BABFA4003E35C8 /* AsyncInterfaceDownloader.swift */,
-				BEFB6A0422BCD4D900FC6504 /* BlockViewController.swift */,
-				BEFB6A0622BCDBA700FC6504 /* CircularProgress.swift */,
-				BEFB6A0822BCDCEF00FC6504 /* DownloaderView.swift */,
 			);
 			path = AsyncDataLoader;
 			sourceTree = "<group>";
@@ -159,6 +153,63 @@
 				39A6BA6922B7B2DD0046B053 /* Info.plist */,
 			);
 			path = AsyncDataLoaderUITests;
+			sourceTree = "<group>";
+		};
+		BEFB6A0C22BD5DEA00FC6504 /* CacheManager */ = {
+			isa = PBXGroup;
+			children = (
+				399DD77C22B88D620064775B /* CacheManager.swift */,
+			);
+			path = CacheManager;
+			sourceTree = "<group>";
+		};
+		BEFB6A0D22BD5DF800FC6504 /* JSON_Parser */ = {
+			isa = PBXGroup;
+			children = (
+				BE503F8922BA6A4E003E35C8 /* SwiftyJSON.swift */,
+			);
+			path = JSON_Parser;
+			sourceTree = "<group>";
+		};
+		BEFB6A0E22BD5E0900FC6504 /* ViewControllers */ = {
+			isa = PBXGroup;
+			children = (
+				39A6BA4922B7B2DB0046B053 /* ViewController.swift */,
+				BEFB6A0A22BD487E00FC6504 /* UniversalDownloadViewController.swift */,
+				BEFB6A0422BCD4D900FC6504 /* BlockViewController.swift */,
+			);
+			path = ViewControllers;
+			sourceTree = "<group>";
+		};
+		BEFB6A0F22BD5E2000FC6504 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				BE503F8B22BA6A83003E35C8 /* Images.json */,
+				39A6BA4E22B7B2DC0046B053 /* Assets.xcassets */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		BEFB6A1022BD5E3A00FC6504 /* DownloadManager */ = {
+			isa = PBXGroup;
+			children = (
+				399DD78622B8C7CF0064775B /* BaseDataTask.swift */,
+				399DD78422B8C6320064775B /* DataDownloadTask.swift */,
+				399DD77E22B8907D0064775B /* AsyncDataLoader.swift */,
+				BE503F8D22BABF4C003E35C8 /* AsyncBlockDownloader.swift */,
+				BE503F8F22BABFA4003E35C8 /* AsyncInterfaceDownloader.swift */,
+				399DD78022B891020064775B /* DownloadCompletionDelegate.swift */,
+			);
+			path = DownloadManager;
+			sourceTree = "<group>";
+		};
+		BEFB6A1122BD5E6F00FC6504 /* CustomControls */ = {
+			isa = PBXGroup;
+			children = (
+				BEFB6A0622BCDBA700FC6504 /* CircularProgress.swift */,
+				BEFB6A0822BCDCEF00FC6504 /* DownloaderView.swift */,
+			);
+			path = CustomControls;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -295,6 +346,7 @@
 			files = (
 				399DD78522B8C6320064775B /* DataDownloadTask.swift in Sources */,
 				BEFB6A0922BCDCEF00FC6504 /* DownloaderView.swift in Sources */,
+				BEFB6A0B22BD487E00FC6504 /* UniversalDownloadViewController.swift in Sources */,
 				399DD78722B8C7CF0064775B /* BaseDataTask.swift in Sources */,
 				399DD77D22B88D620064775B /* CacheManager.swift in Sources */,
 				BE503F8A22BA6A4E003E35C8 /* SwiftyJSON.swift in Sources */,

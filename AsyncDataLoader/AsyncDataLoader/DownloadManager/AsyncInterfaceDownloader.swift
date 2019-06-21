@@ -35,7 +35,6 @@ class AsyncInterfaceDownloader: AsyncDataLoader {
         guard let request = self.getRequest(From: urlPath) else {return (nil, nil, nil)}
         guard let task = self.downloadSession?.dataTask(with: request) else {
             delegate.didDownloadCompleted(ForID: "", Data: nil, Type: nil, Error: self.getDownloadError())
-            
             return (nil, nil, nil)
         }
         let downloadTask = DataDownloadTask(WithTask: task)
@@ -91,8 +90,8 @@ class AsyncInterfaceDownloader: AsyncDataLoader {
         return dataTask
     }
     override internal func cancel(Task task:DataDownloadTask, Key key:String ) {
-        self.cancel(task)
-        task.downloadDelegates.removeValue(forKey: key)
+        let delegate = task.downloadDelegates.removeValue(forKey: key) as? DownloadCompletionDelegate
+        delegate?.didDownloadCanceled(ForID: key)
         if task.downloadDelegates.count == 0 {
             task.cancel()
         }

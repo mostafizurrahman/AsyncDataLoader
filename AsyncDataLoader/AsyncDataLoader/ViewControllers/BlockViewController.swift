@@ -79,9 +79,17 @@ class BlockViewController: UIViewController {
     
     fileprivate func startDownload(FromURL url:String,
                                    toDownloadView downloadView:DownloaderView){
-        downloadView.urlLabel.text = "Downloading from \(url)"
+        
         downloadView.remoteUrl = url
-        self.blockDownloader.download(From: url, progressHandler: { (percent) in
+        
+        
+        self.blockDownloader.download(From: url, beginHandler: {(dataSize, dataType)in
+            let bcf = ByteCountFormatter()
+            bcf.allowedUnits = [.useMB]
+            bcf.countStyle = .file
+            let sizeMB = bcf.string(fromByteCount: dataSize)
+            downloadView.urlLabel.text = "Downloading \(sizeMB) MB of type \(dataType.rawValue)"
+        }, progressHandler: { (percent) in
             
             downloadView.progressView.progress = percent
             downloadView.percentIndicator.text = "Download Completed \(Int(100*percent))%"

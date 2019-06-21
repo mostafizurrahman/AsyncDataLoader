@@ -12,6 +12,7 @@ class AsyncBlockDownloader: AsyncDataLoader {
     
     //download using completion blocks
     func download(From urlPath:String,
+                  beginHandler:@escaping ((Int64, DataType)->Void),
                   progressHandler:@escaping ((Float) -> Void),
                   cancelHandler:@escaping (()->Void),
                   identifier:((String?)->Void),
@@ -26,6 +27,7 @@ class AsyncBlockDownloader: AsyncDataLoader {
             print(downloadKey)
             for downloadTask in self.downloadTaskArray {
                 if downloadTask.dataTask.originalRequest?.url?.absoluteString.elementsEqual(urlPath) ?? false {
+                    downloadTask.beginingHandlers[downloadKey] = beginHandler
                     downloadTask.completionHandlers[downloadKey] = completionHandler
                     downloadTask.cancelHandlers[downloadKey] = cancelHandler
                     downloadTask.progressHandlers[downloadKey] = progressHandler
@@ -43,6 +45,7 @@ class AsyncBlockDownloader: AsyncDataLoader {
                 return
             }
             let downloadTask = DataDownloadTask(WithTask: task)
+            downloadTask.beginingHandlers[downloadKey] = beginHandler
             downloadTask.completionHandlers[downloadKey] = completionHandler
             downloadTask.cancelHandlers[downloadKey] = cancelHandler
             downloadTask.progressHandlers[downloadKey] = progressHandler
@@ -108,6 +111,7 @@ class AsyncBlockDownloader: AsyncDataLoader {
         task.beginingHandlers.removeValue(forKey: key)
         task.progressHandlers.removeValue(forKey: key)
         task.completionHandlers.removeValue(forKey: key)
+        task.beginingHandlers.removeValue(forKey: key)
         if let cancelBlock = task.cancelHandlers.removeValue(forKey: key) {
             cancelBlock?()
         }
