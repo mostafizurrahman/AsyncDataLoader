@@ -175,8 +175,8 @@
 			isa = PBXGroup;
 			children = (
 				39A6BA4922B7B2DB0046B053 /* ViewController.swift */,
-				BEFB6A0A22BD487E00FC6504 /* UniversalDownloadViewController.swift */,
 				BEFB6A0422BCD4D900FC6504 /* BlockViewController.swift */,
+				BEFB6A0A22BD487E00FC6504 /* UniversalDownloadViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";

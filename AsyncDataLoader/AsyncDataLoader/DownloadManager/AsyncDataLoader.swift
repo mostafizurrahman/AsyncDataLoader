@@ -84,6 +84,11 @@ class AsyncDataLoader: NSObject {
                   description: "Unable to initiate download process.", code: 1001)
     }
     
+    func getNetworkError()->DataError{
+        return DataError(title: "Download Fail",
+                         description: "File not found.", code: 1002)
+    }
+    
     func clear(Task dataTask:DataDownloadTask){
         assertionFailure("must be overriden by child")
     }
@@ -119,10 +124,19 @@ extension AsyncDataLoader:URLSessionDataDelegate {
     
     func urlSession(_ session: URLSession, dataTask: URLSessionDataTask, didReceive response: URLResponse,
                     completionHandler: @escaping (URLSession.ResponseDisposition) -> Void) {
-        
+    
         guard let task = self.downloadTaskArray.first(where: { $0.dataTask == dataTask }) else {
             completionHandler(.cancel)
             return
+        }
+        if let resp = response as? HTTPURLResponse {
+            if resp.statusCode > 299 {
+                DispatchQueue.main.async {
+                    self.finished(Task: task, Error: self.getNetworkError())
+                }
+                task.cancel()
+                return
+            }
         }
         if let type = response.mimeType {
             task.dataType = type.getDataType()
@@ -153,6 +167,12 @@ extension AsyncDataLoader:URLSessionDataDelegate {
     }
     
     
+}
+
+extension AsyncDataLoader:URLSessionDelegate {
+    func urlSession(_ session: URLSession, didBecomeInvalidWithError error: Error?) {
+        print(error)
+    }
 }
 
 

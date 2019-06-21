@@ -22,6 +22,7 @@ class BlockViewController: UIViewController {
     let jsonarray = AppDelegate.jsonarray
     override func viewDidLoad() {
         super.viewDidLoad()
+        self.title = "Download Scroll View"
         // Do any additional setup after loading the view.
     }
     
@@ -30,7 +31,7 @@ class BlockViewController: UIViewController {
         if let _title = sender.title(for: UIControl.State.normal),
             _title.elementsEqual("  START  ") {
             sender.setTitle("  STOP  ", for: UIControl.State.normal)
-            guard let url1 = self.jsonarray[0]["urls"].dictionaryValue["full"]?.stringValue else {
+            guard let url1 = self.jsonarray[2]["urls"].dictionaryValue["full"]?.stringValue else {
                 return
             }
             self.startDownload(FromURL: url1, toDownloadView: self.downloadView)
@@ -100,12 +101,16 @@ class BlockViewController: UIViewController {
         }, identifier: { (identifier) in
             downloadView.downloadIdentifier = identifier
         }) { (data, dataType, error) in
-            if let _data = data {
+            if let _err = error as? DataError{
+                if let desc = _err.errorDescription,
+                    let _title = _err.title {
+                    downloadView.percentIndicator.text = "\(desc)  \(_title)"
+                }
+            } else if let _data = data {
+                
                 let image = UIImage(data: _data)
                 downloadView.imageView.image = image
-            } else if let _err = error as? DataError{
-                downloadView.percentIndicator.text = "Error \(_err.errorDescription)  \(_err.title)"
-            }
+            } 
         }
     }
     

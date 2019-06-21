@@ -82,7 +82,9 @@ class AsyncBlockDownloader: AsyncDataLoader {
                     completionHandler(task.buffer,task.dataType, error)
                 }
             }
-            self.cacheData(Task: task)
+            if error == nil {
+                self.cacheData(Task: task)
+            }
             self.clear(Task: task)
         }
     }
