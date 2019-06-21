@@ -14,7 +14,6 @@ protocol BaseDataTask{
     var completionHandlers: [String : ((Data?, DataType?, Error?) -> Void)?]{ get set }
     var progressHandlers:[String :  ((Float) -> Void?)?]{ get set }
     var cancelHandlers:[String : (()->Void?)?]{ get set }
-    var suspendHandlers:[String : (()->Void?)?]{ get set }
     var beginingHandlers:[String : ((Int64,DataType) -> Void?)?]{ get set }
         func resume()
         func suspend()

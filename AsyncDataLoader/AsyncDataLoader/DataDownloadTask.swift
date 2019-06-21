@@ -19,10 +19,10 @@ enum DataType:Int{
 
 class DataDownloadTask: BaseDataTask {
     
+    var forcedCacel = false
     var completionHandlers: [String : ((Data?,DataType?, Error?) -> Void)?] = [:]
     var progressHandlers: [String : ((Float) -> Void?)?] = [:]
     var cancelHandlers:[String : (()->Void?)?] = [:]
-    var suspendHandlers:[String : (()->Void?)?] = [:]
     var beginingHandlers:[String : ((Int64,DataType) -> Void?)?] = [:]
     var dataType:DataType = .raw
     var downloadDelegates:[String : DownloadCompletionDelegate?] = [:]

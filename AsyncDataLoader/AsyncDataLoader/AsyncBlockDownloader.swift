@@ -12,10 +12,10 @@ class AsyncBlockDownloader: AsyncDataLoader {
     
     //download using completion blocks
     func download(From urlPath:String,
-                  progressHandler:@escaping ((Float) -> Void?),
-                  cancelHandler:(()->Void?)?,
-                  suspendHandler:(()->Void?)?,
-                  completionHandler: @escaping (Data?,DataType?, Error?)->Void) -> String?{
+                  progressHandler:@escaping ((Float) -> Void),
+                  cancelHandler:@escaping (()->Void),
+                  identifier:((String?)->Void),
+                  completionHandler: @escaping (Data?,DataType?, Error?)->Void){
         
         let (_data, _type) = CacheManager.shared.getObject(ForKey: urlPath as NSString)
         if let data = _data, let type = _type {
@@ -27,30 +27,28 @@ class AsyncBlockDownloader: AsyncDataLoader {
                 if downloadTask.dataTask.originalRequest?.url?.absoluteString.elementsEqual(urlPath) ?? false {
                     downloadTask.completionHandlers[downloadKey] = completionHandler
                     downloadTask.cancelHandlers[downloadKey] = cancelHandler
-                    downloadTask.suspendHandlers[downloadKey] = suspendHandler
+//                    downloadTask.suspendHandlers[downloadKey] = suspendHandler
                     downloadTask.progressHandlers[downloadKey] = progressHandler
-                    return downloadKey
+                    identifier(downloadKey)
                 }
             }
             
             guard let request = self.getRequest(From: urlPath) else {
                 completionHandler(nil,nil, getUrlError())
-                return nil
+                return
             }
             guard let task = self.downloadSession?.dataTask(with: request) else {
                 completionHandler(nil,nil, getDownloadError())
-                return nil
+                return
             }
             let downloadTask = DataDownloadTask(WithTask: task)
             downloadTask.completionHandlers[downloadKey] = completionHandler
             downloadTask.cancelHandlers[downloadKey] = cancelHandler
-            downloadTask.suspendHandlers[downloadKey] = suspendHandler
             downloadTask.progressHandlers[downloadKey] = progressHandler
             self.downloadTaskArray.append(downloadTask)
             downloadTask.resume()
-            return downloadKey
+            identifier(downloadKey)
         }
-        return nil
     }
     
     override internal func didResponsed(ForTask task:DataDownloadTask){

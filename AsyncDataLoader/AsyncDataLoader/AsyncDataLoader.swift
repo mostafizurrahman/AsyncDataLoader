@@ -31,6 +31,7 @@ class AsyncDataLoader: NSObject {
         if let index=idx {
             return self.downloadTaskArray.remove(at: index)
         }
+        dataTask?.forcedCacel = true
         return dataTask
     }
     
@@ -41,6 +42,7 @@ class AsyncDataLoader: NSObject {
     func cancel(DownloadPath remotePath:String, DownloadID key:String){
         let (dataTask,_) = self.getTask(ForUrl: remotePath)
         if let task = dataTask {
+            task.forcedCacel = true
             self.cancel(Task: task, Key: key)
         }
     }
@@ -144,8 +146,9 @@ extension AsyncDataLoader:URLSessionDataDelegate {
             return
         }
         let task = downloadTaskArray.remove(at: index)
-        self.cacheData(Task: task)
-        self.finished(Task: task, Error: error)
+        if !task.forcedCacel {
+            self.finished(Task: task, Error: error)
+        }
     }
     
     

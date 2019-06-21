@@ -11,36 +11,38 @@ import UIKit
 class AsyncInterfaceDownloader: AsyncDataLoader {
 
     
-    //befor calling this method
-    //set delegation 'downloadDelegate:DownloadCompletionDelegate'
-    func download(FromPath urlPath:String, DelegateTo delegate: DownloadCompletionDelegate)->String?{
+    
+    //1. first object retured is a download id to track an individual download process
+    //this first object will be used to determine finished, cancel particular download process
+    //associated with the id. if any error occured to nitiate download, this object will be nil
+    //2. sencond parameter is Data that is found in the cache, if ther is no
+    //caceched data then it will be nil
+    //3. third object retured by this method is a data type of the cached object
+    func download(FromPath urlPath:String, DelegateTo delegate: DownloadCompletionDelegate)->(String?, Data?, DataType?){
         
         
         let (_data, _type) = CacheManager.shared.getObject(ForKey: urlPath as NSString)
         if let data = _data, let type = _type {
-            delegate.onCompleted(Parcentage: 1, ForID: "")
-            delegate.didDownloadCompleted(ForID: "", Data: _data, Type: type, Error: nil)
-        } else {
-            let downloadKey = super.getID()
-            for downloadTask in self.downloadTaskArray {
-                if downloadTask.dataTask.originalRequest?.url?.absoluteString.elementsEqual(urlPath) ?? false {
-                    downloadTask.downloadDelegates[downloadKey] = delegate
-                    return downloadKey
-                }
-            }
-            guard let request = self.getRequest(From: urlPath) else {return nil}
-            guard let task = self.downloadSession?.dataTask(with: request) else {
-                delegate.didDownloadCompleted(ForID: "", Data: nil, Type: nil, Error: self.getDownloadError())
-                
-                return nil
-            }
-            let downloadTask = DataDownloadTask(WithTask: task)
-            downloadTask.downloadDelegates[downloadKey] = delegate
-            self.downloadTaskArray.append(downloadTask)
-            downloadTask.resume()
-            return downloadKey
+            return (nil, data, type)
         }
-        return nil
+        let downloadKey = super.getID()
+        for downloadTask in self.downloadTaskArray {
+            if downloadTask.dataTask.originalRequest?.url?.absoluteString.elementsEqual(urlPath) ?? false {
+                downloadTask.downloadDelegates[downloadKey] = delegate
+                return (downloadKey, nil, nil)
+            }
+        }
+        guard let request = self.getRequest(From: urlPath) else {return (nil, nil, nil)}
+        guard let task = self.downloadSession?.dataTask(with: request) else {
+            delegate.didDownloadCompleted(ForID: "", Data: nil, Type: nil, Error: self.getDownloadError())
+            
+            return (nil, nil, nil)
+        }
+        let downloadTask = DataDownloadTask(WithTask: task)
+        downloadTask.downloadDelegates[downloadKey] = delegate
+        self.downloadTaskArray.append(downloadTask)
+        downloadTask.resume()
+        return (downloadKey, nil, nil)
     }
     
     override internal func didResponsed(ForTask task:DataDownloadTask) {
@@ -72,7 +74,6 @@ class AsyncInterfaceDownloader: AsyncDataLoader {
                                                           Data: task.buffer,
                                                           Type: task.dataType,
                                                           Error: error)
-                    
                 }
             }
             self.cacheData(Task: task)

@@ -36,8 +36,15 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     var window: UIWindow?
 
+    static var jsonarray:[JSON] = []
 
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
+        
+        if let path = Bundle.main.url(forResource: "Images", withExtension: "json") {
+            let data = try! Data.init(contentsOf: path, options: Data.ReadingOptions.uncached)
+            let jsonData = JSON(data: data)
+            AppDelegate.jsonarray = jsonData.arrayValue
+        }
         // Override point for customization after application launch.
         return true
     }
