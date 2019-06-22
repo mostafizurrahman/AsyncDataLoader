@@ -13,10 +13,12 @@ class PullViewController: UIViewController {
     @IBOutlet weak var userCollectionView: UICollectionView!
     var refreshControl = UIRefreshControl()
     let blockDownloader = AsyncBlockDownloader()
-    let jsonArray = AppDelegate.jsonarray
+    let delegateDownloader = AsyncInterfaceDownloader()
+    var jsonArray:[JSON] = []
+    var jsonDownloadKey = ""
     override func viewDidLoad() {
         super.viewDidLoad()
-        refreshControl.attributedTitle = NSAttributedString(string: "Pull to refresh")
+        refreshControl.attributedTitle = NSAttributedString(string: "Loading new data....")
         refreshControl.addTarget(self, action: #selector(refresh(_:)), for: UIControl.Event.valueChanged)
         self.userCollectionView.addSubview(refreshControl)
         
@@ -26,12 +28,16 @@ class PullViewController: UIViewController {
                                            bottom: 10, right: 10)
         layout.minimumLineSpacing = 10
         self.userCollectionView.collectionViewLayout = layout
+        self.refresh(UIButton())
         // Do any additional setup after loading the view.
     }
     
     @objc func refresh(_ sender:AnyObject) {
         // Code to refresh table viewre
-        refreshControl.endRefreshing()
+        _ = CacheManager.shared.removeCache(ForKey: "http://pastebin.com/raw/wgkJgazE")
+       let (key,_,_) = self.delegateDownloader.download(FromPath: "http://pastebin.com/raw/wgkJgazE",
+                                         DelegateTo: self)
+        self.jsonDownloadKey = key ?? ""
     }
 
     /*
@@ -57,7 +63,8 @@ extension PullViewController:UICollectionViewDelegate, UICollectionViewDataSourc
         let user = self.jsonArray[indexPath.row]["user"].dictionaryValue
         print(user["name"] ?? "")
         let name = user["name"] // user["name"]?.stringValue
-        userCell.userName.text = name?.string 
+        userCell.userName.text = name?.string
+        userCell.errorTxt.isHidden = true
         if let url =  user["profile_image"]?.dictionaryValue["large"]?.stringValue {
             
             self.blockDownloader.download(From: url, beginHandler: { (_, _) in
@@ -86,3 +93,33 @@ extension PullViewController:UICollectionViewDelegate, UICollectionViewDataSourc
     
 }
 
+extension PullViewController : DownloadCompletionDelegate{
+    func didDownloadCompleted(ForID downloadID: String, Data data: Data?,
+                              Type type: DataType?, Error error: Error?) {
+        if self.jsonDownloadKey.elementsEqual(downloadID) ,
+            let _data = data {
+            let jsonData = JSON(data: _data)
+            self.jsonArray = jsonData.arrayValue
+            self.userCollectionView.reloadData()
+            self.refreshControl.endRefreshing()
+        }
+    }
+    
+    func didDownloadCanceled(ForID downloadID: String) {
+        self.refreshControl.endRefreshing()
+    }
+    
+    func onCompleted(Parcentage percent: Float, ForID downloadID: String) {
+        
+    }
+    
+    func willBeginDownload(WithSize size: Int64, Type type: DataType, ForID downloadID: String) {
+        
+    }
+    
+    func didDownloadSuspended(ForID downloadID: String) {
+        
+    }
+    
+    
+}
