@@ -31,7 +31,7 @@ class BlockViewController: UIViewController {
         if let _title = sender.title(for: UIControl.State.normal),
             _title.elementsEqual("  START  ") {
             sender.setTitle("  STOP  ", for: UIControl.State.normal)
-            guard let url1 = self.jsonarray[2]["urls"].dictionaryValue["full"]?.stringValue else {
+            guard let url1 = self.jsonarray[0]["urls"].dictionaryValue["full"]?.stringValue else {
                 return
             }
             self.startDownload(FromURL: url1, toDownloadView: self.downloadView)
