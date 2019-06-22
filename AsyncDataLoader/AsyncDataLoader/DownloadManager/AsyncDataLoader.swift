@@ -138,6 +138,7 @@ extension AsyncDataLoader:URLSessionDataDelegate {
                 return
             }
         }
+        print(response.expectedContentLength)
         if let type = response.mimeType {
             task.dataType = type.getDataType()
         }

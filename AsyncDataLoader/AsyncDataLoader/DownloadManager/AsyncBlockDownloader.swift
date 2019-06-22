@@ -120,7 +120,6 @@ class AsyncBlockDownloader: AsyncDataLoader {
         if task.completionHandlers.count == 0 {
             task.cancel()
         }
-        print(task.progressHandlers.count)
     }
     
     override internal func clear(Task dataTask: DataDownloadTask) {
