@@ -30,7 +30,7 @@ class UniversalDownloadViewController: UIViewController {
         if sender.selectedSegmentIndex == 1 {
             self.urlTextField.text = "http://pastebin.com/raw/wgkJgazE"
         } else if sender.selectedSegmentIndex == 0 {
-            self.urlTextField.text = AppDelegate.jsonarray[4]["urls"].dictionaryValue["full"]?.stringValue
+            self.urlTextField.text = AppDelegate.jsonarray[3]["urls"].dictionaryValue["full"]?.stringValue
         } else if sender.selectedSegmentIndex == 2 {
             self.urlTextField.text = "https://www.w3schools.com/xml/plant_catalog.xml"
         } else if sender.selectedSegmentIndex == 3 {

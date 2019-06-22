@@ -61,7 +61,6 @@ extension PullViewController:UICollectionViewDelegate, UICollectionViewDataSourc
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let userCell = collectionView.dequeueReusableCell(withReuseIdentifier: "UserCell", for: indexPath) as! UserCell
         let user = self.jsonArray[indexPath.row]["user"].dictionaryValue
-        print(user["name"] ?? "")
         let name = user["name"] // user["name"]?.stringValue
         userCell.userName.text = name?.string
         userCell.errorTxt.isHidden = true

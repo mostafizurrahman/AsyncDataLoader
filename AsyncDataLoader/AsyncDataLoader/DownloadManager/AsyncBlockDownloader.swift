@@ -24,7 +24,6 @@ class AsyncBlockDownloader: AsyncDataLoader {
             completionHandler(data,type, nil)
         } else {
             let downloadKey = super.getID()
-            print(downloadKey)
             for downloadTask in self.downloadTaskArray {
                 if downloadTask.dataTask.originalRequest?.url?.absoluteString.elementsEqual(urlPath) ?? false {
                     downloadTask.beginingHandlers[downloadKey] = beginHandler

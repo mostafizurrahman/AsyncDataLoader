@@ -72,7 +72,6 @@ class BlockViewController: UIViewController {
         if let downloderView = sender.superview as? DownloaderView ,
             let id = downloderView.downloadIdentifier,
         let remote = downloderView.remoteUrl{
-            print(downloderView.tag)
             self.blockDownloader.cancel(DownloadPath: remote, DownloadID: id)
         }
     }
