@@ -23,7 +23,7 @@ class PullViewController: UIViewController {
         self.userCollectionView.addSubview(refreshControl)
         
         let layout = UICollectionViewFlowLayout()
-        layout.itemSize = CGSize(width: UIScreen.main.bounds.width / 2 - 30, height: 250)
+        layout.itemSize = CGSize(width: UIScreen.main.bounds.width / 2 - 30, height: 200)
         layout.sectionInset = UIEdgeInsets(top:10 , left: 10,
                                            bottom: 10, right: 10)
         layout.minimumLineSpacing = 10
