@@ -39,7 +39,7 @@ class AsyncDataLoaderTests: XCTestCase {
     func testBlockDownload(){
         //download an image and test
         if let url = AppDelegate.jsonarray[0]["urls"].dictionaryValue["full"]?.stringValue {
-            let data_size = 286269
+            let data_size = 286269 // image data length of the above url
             self.blockDownloader.download(From: url, beginHandler: { (_data_size, _type) in
                 XCTAssert(data_size == _data_size, "Test failed in begin block for wrong image data size returned")
                 XCTAssert(_type == DataType.image, "Test failed in begin block for wrong content type returned")
@@ -88,5 +88,28 @@ class AsyncDataLoaderTests: XCTestCase {
             return url
         }
         return nil
+    }
+    
+    
+    func testAddCache(){
+        guard let data = "Mostafizur Rahman".data(using: String.Encoding.utf8) else { return }
+        CacheManager.shared.add(Data: data, forKey: "name", type: DataType.plain)
+        XCTAssert(CacheManager.shared.cacheTimer != nil, "Fail to start cache expiration timer")
+        let (_data, type) = CacheManager.shared.getObject(ForKey: "name")
+        XCTAssert(_data != nil, "Cache data for the specified key is nil")
+        XCTAssert(type != nil, "Cache data type specified key is nil")
+        guard let __data = _data else {return}
+        XCTAssert(__data == data, "Cache data and actual data is different")
+        guard let __type = type else {return}
+        XCTAssert(__type == DataType.plain, "Cache data type and actual dat type is different")
+    }
+    
+    func testDeleteCache(){
+        guard let data = "Mostafizur Rahman".data(using: String.Encoding.utf8) else { return }
+        CacheManager.shared.add(Data: data, forKey: "name", type: DataType.plain)
+        let result = CacheManager.shared.removeCache(ForKey: "name")
+        XCTAssert(!CacheManager.shared.cacheKeys.contains("name"), "Deleted cache key found")
+        XCTAssert(result, "Cache does not clear for the specified key")
+        XCTAssert(CacheManager.shared.MAX_MEM_SIZE ==  33210470, "Cache memory mismatched after clearing object")
     }
 }
