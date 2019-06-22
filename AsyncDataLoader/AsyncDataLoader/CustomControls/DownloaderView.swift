@@ -13,9 +13,9 @@ class DownloaderView: UIView {
     var downloadIdentifier:String?
     var remoteUrl:String?
     @IBOutlet weak var urlLabel: UILabel!
+    @IBOutlet weak var circleProgress: CircularProgress!
     @IBOutlet weak var percentIndicator: UILabel!
     @IBOutlet weak var progressView: UIProgressView!
-    @IBOutlet weak var circleProgress: CircularProgress!
     @IBOutlet weak var imageView: UIImageView!
     
     /*

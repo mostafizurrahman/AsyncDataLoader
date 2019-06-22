@@ -21,7 +21,7 @@ class UniversalDownloadViewController: UIViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        self.title = "Dynamic Download"
         // Do any additional setup after loading the view.
     }
     
@@ -68,7 +68,11 @@ class UniversalDownloadViewController: UIViewController {
             }) { (data, dataType, error) in
                 
                 sender.isEnabled = true
-                if let _data = data {
+                if let _err = error {
+                    self.textview.isHidden = false
+                    self.textview.text = "Data not found in the specified url"
+                }
+                else if let _data = data {
                     
                     if dataType == .image {
                         self.imageView.isHidden = false
@@ -82,8 +86,6 @@ class UniversalDownloadViewController: UIViewController {
                         self.textview.text = string
                     }
                     
-                } else if let _err = error as? DataError{
-//                    downloadView.percentIndicator.text = "Error \(_err.errorDescription)  \(_err.title)"
                 }
             }
         }

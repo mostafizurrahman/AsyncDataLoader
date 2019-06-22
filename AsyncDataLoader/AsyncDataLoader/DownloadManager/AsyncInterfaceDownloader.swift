@@ -51,6 +51,7 @@ class AsyncInterfaceDownloader: AsyncDataLoader {
                     downloadDelegate.willBeginDownload(WithSize: task.dataSize,
                                                        Type: task.dataType,
                                                        ForID: delegate.key)
+                    
                 }
             }
         }

@@ -23,6 +23,8 @@
 		BE503F8C22BA6A83003E35C8 /* Images.json in Resources */ = {isa = PBXBuildFile; fileRef = BE503F8B22BA6A83003E35C8 /* Images.json */; };
 		BE503F8E22BABF4C003E35C8 /* AsyncBlockDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE503F8D22BABF4C003E35C8 /* AsyncBlockDownloader.swift */; };
 		BE503F9022BABFA4003E35C8 /* AsyncInterfaceDownloader.swift in Sources */ = {isa = PBXBuildFile; fileRef = BE503F8F22BABFA4003E35C8 /* AsyncInterfaceDownloader.swift */; };
+		BEA7817122BDA24F007696DF /* PullViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA7817022BDA24F007696DF /* PullViewController.swift */; };
+		BEA7817322BDA53D007696DF /* UserCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEA7817222BDA53D007696DF /* UserCell.swift */; };
 		BEFB6A0522BCD4D900FC6504 /* BlockViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFB6A0422BCD4D900FC6504 /* BlockViewController.swift */; };
 		BEFB6A0722BCDBA700FC6504 /* CircularProgress.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFB6A0622BCDBA700FC6504 /* CircularProgress.swift */; };
 		BEFB6A0922BCDCEF00FC6504 /* DownloaderView.swift in Sources */ = {isa = PBXBuildFile; fileRef = BEFB6A0822BCDCEF00FC6504 /* DownloaderView.swift */; };
@@ -69,6 +71,8 @@
 		BE503F8B22BA6A83003E35C8 /* Images.json */ = {isa = PBXFileReference; lastKnownFileType = text.json; path = Images.json; sourceTree = "<group>"; };
 		BE503F8D22BABF4C003E35C8 /* AsyncBlockDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncBlockDownloader.swift; sourceTree = "<group>"; };
 		BE503F8F22BABFA4003E35C8 /* AsyncInterfaceDownloader.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AsyncInterfaceDownloader.swift; sourceTree = "<group>"; };
+		BEA7817022BDA24F007696DF /* PullViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PullViewController.swift; sourceTree = "<group>"; };
+		BEA7817222BDA53D007696DF /* UserCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserCell.swift; sourceTree = "<group>"; };
 		BEFB6A0422BCD4D900FC6504 /* BlockViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlockViewController.swift; sourceTree = "<group>"; };
 		BEFB6A0622BCDBA700FC6504 /* CircularProgress.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CircularProgress.swift; sourceTree = "<group>"; };
 		BEFB6A0822BCDCEF00FC6504 /* DownloaderView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DownloaderView.swift; sourceTree = "<group>"; };
@@ -177,6 +181,7 @@
 				39A6BA4922B7B2DB0046B053 /* ViewController.swift */,
 				BEFB6A0422BCD4D900FC6504 /* BlockViewController.swift */,
 				BEFB6A0A22BD487E00FC6504 /* UniversalDownloadViewController.swift */,
+				BEA7817022BDA24F007696DF /* PullViewController.swift */,
 			);
 			path = ViewControllers;
 			sourceTree = "<group>";
@@ -208,6 +213,7 @@
 			children = (
 				BEFB6A0622BCDBA700FC6504 /* CircularProgress.swift */,
 				BEFB6A0822BCDCEF00FC6504 /* DownloaderView.swift */,
+				BEA7817222BDA53D007696DF /* UserCell.swift */,
 			);
 			path = CustomControls;
 			sourceTree = "<group>";
@@ -352,11 +358,13 @@
 				BE503F8A22BA6A4E003E35C8 /* SwiftyJSON.swift in Sources */,
 				BEFB6A0522BCD4D900FC6504 /* BlockViewController.swift in Sources */,
 				399DD77F22B8907D0064775B /* AsyncDataLoader.swift in Sources */,
+				BEA7817322BDA53D007696DF /* UserCell.swift in Sources */,
 				BE503F9022BABFA4003E35C8 /* AsyncInterfaceDownloader.swift in Sources */,
 				BEFB6A0722BCDBA700FC6504 /* CircularProgress.swift in Sources */,
 				399DD78122B891020064775B /* DownloadCompletionDelegate.swift in Sources */,
 				39A6BA4A22B7B2DB0046B053 /* ViewController.swift in Sources */,
 				BE503F8E22BABF4C003E35C8 /* AsyncBlockDownloader.swift in Sources */,
+				BEA7817122BDA24F007696DF /* PullViewController.swift in Sources */,
 				39A6BA4822B7B2DB0046B053 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
